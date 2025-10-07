@@ -1,332 +1,311 @@
-# 📝 TODO - งานที่เหลือ
+# Remaining Tasks
 
-## ✅ ทำเสร็จแล้ว
+## ✅ Completed (Just Now)
 
-### 1. Toast Notification System ✅
-- ✅ สร้าง Toast Component (4 types)
-- ✅ สร้าง ToastProvider
-- ✅ แทนที่ alert() ทั้งหมด
-- ✅ Animation slide-in-right
-- ✅ Auto-dismiss
+1. **Arrival/Departure Times for Stops**
+   - ✅ Updated `lib/types.ts` with `StopSchedule` interface
+   - ✅ Added `stopSchedules` to Train interface
+   - ✅ Updated `lib/trainData.ts` for T001 train with times
+   - ✅ Modified `components/TrainCard.tsx` to display arrival/departure times
+   - **Example:** Phra Nakhon Si Ayutthaya (AYA) - ถึง: 09:30, ออก: 09:35
 
-### 2. Performance Optimization (รอบแรก) ✅
-- ✅ ลบ Lazy Loading
-- ✅ ลด delay จาก 500ms → 100ms
-- ✅ Optimize animations
-- ✅ Optimize Next.js config
+2. **Popular Routes Component Created**
+   - ✅ Built `components/PopularRoutes.tsx`
+   - ✅ Real-time updates (every 5 seconds)
+   - ✅ Shows top 4 most searched routes
+   - ✅ Trend indicators (📈 up, 📉 down, ➡️ stable)
+   - ✅ Search counts with live indicator
+   - ✅ Clickable to auto-fill search form
 
----
-
-## 🚧 ยังไม่ทำ - ต้องทำให้เสร็จ
-
-### 1. Advanced Filters (มีอยู่แล้ว แต่ต้องเพิ่ม)
-**สิ่งที่ต้องเพิ่ม:**
-```typescript
-// ใน TrainFilter.tsx เพิ่ม:
-- [ ] Sort by (ราคา ต่ำ-สูง, สูง-ต่ำ)
-- [ ] Sort by (เวลาออกเดินทาง)
-- [ ] Sort by (ระยะเวลาเดินทาง)
-- [ ] กรอง Amenities (Wi-Fi, อาหาร, ปลั๊กไฟ, เครื่องปรับอากาศ)
-```
-
-**ไฟล์ที่ต้องแก้:**
-- `components/TrainFilter.tsx` - เพิ่ม sort options และ amenities filter
-- `components/TrainResults.tsx` - รองรับ sort
+3. **WCAG 2.2 AAA Accessibility Documentation**
+   - ✅ Created `ACCESSIBILITY_CHECKLIST.md`
+   - ✅ Complete Level A, AA, AAA criteria breakdown
+   - ✅ Screen reader testing guide
+   - ✅ Recommended enhancements
+   - ✅ Implementation priority phases
 
 ---
 
-### 2. Favorite Routes System
-**สิ่งที่ต้องทำ:**
-```typescript
-// สร้างไฟล์ใหม่:
-- [ ] hooks/useFavorites.ts - Custom hook สำหรับจัดการ favorites (localStorage)
-- [ ] components/FavoriteButton.tsx - ปุ่มดาวสำหรับบันทึก
-- [ ] components/FavoritesList.tsx - แสดงรายการโปรด
+## 📋 Next Steps (To Complete Your Requests)
 
-// แก้ไฟล์เดิม:
-- [ ] app/page.tsx - เพิ่ม favorites section
-- [ ] components/TrainSearch.tsx - เพิ่มปุ่มโหลดจาก favorites
-```
+### 1. Integrate PopularRoutes Component into Homepage
 
-**ฟีเจอร์:**
-- บันทึกเส้นทางโปรด (สถานีต้นทาง-ปลายทาง)
-- Quick search จากรายการโปรด
-- ลบรายการโปรดได้
-- เก็บใน localStorage
+**Recommended Placement: Below Search Form**
 
----
+Edit `app/page.tsx`:
 
-### 3. Empty State Illustrations
-**สิ่งที่ต้องทำ:**
-```typescript
-// สร้างไฟล์ใหม่:
-- [ ] components/EmptyState.tsx - Component สำหรับ empty states
-- [ ] public/illustrations/ - โฟลเดอร์เก็บ SVG
+```tsx
+import PopularRoutes from '@/components/PopularRoutes';
 
-// แก้ไฟล์เดิม:
-- [ ] components/TrainResults.tsx - ใช้ EmptyState แทน text
-- [ ] app/page.tsx - แสดง EmptyState เมื่อยังไม่ได้ค้นหา
-```
+export default function Home() {
+  // ... existing code ...
+  
+  const handlePopularRouteClick = (from: string, to: string) => {
+    // Auto-fill search form
+    setSearchParams({ origin: from, destination: to });
+    // Optionally trigger search immediately
+    handleSearch({ origin: from, destination: to });
+  };
 
-**ใช้ SVG illustrations สำหรับ:**
-- ยังไม่ได้ค้นหา
-- ไม่พบผลลัพธ์
-- Error / Network issue
-
----
-
-### 4. Dark Mode
-**สิ่งที่ต้องทำ:**
-```bash
-npm install next-themes
-```
-
-```typescript
-// สร้างไฟล์ใหม่:
-- [ ] components/ThemeProvider.tsx
-- [ ] components/ThemeToggle.tsx
-
-// แก้ไฟล์เดิม:
-- [ ] app/layout.tsx - ใส่ ThemeProvider
-- [ ] app/globals.css - เพิ่ม dark mode styles
-- [ ] app/page.tsx - เพิ่ม ThemeToggle ใน header
-
-// เพิ่ม dark: variants ทุกไฟล์:
-- [ ] components/TrainCard.tsx
-- [ ] components/TrainResults.tsx
-- [ ] components/TrainSearch.tsx
-- [ ] components/AccessibilityToolbar.tsx
-```
-
-**Classes:**
-```css
-/* เพิ่มใน globals.css */
-.dark {
-  /* Dark mode styles */
+  return (
+    <main>
+      {/* Existing search form */}
+      <TrainSearch onSearch={handleSearch} />
+      
+      {/* ADD THIS: Popular Routes Section */}
+      {!results && (
+        <div className="mt-8">
+          <PopularRoutes onRouteClick={handlePopularRouteClick} />
+        </div>
+      )}
+      
+      {/* Existing results */}
+      {results && <TrainResults results={results} />}
+    </main>
+  );
 }
 ```
 
+**Alternative Placements:**
+- **Option A:** Below search, above results (shown above) ⭐ **RECOMMENDED**
+- **Option B:** Sidebar (desktop only)
+- **Option C:** Fixed bottom banner (mobile)
+- **Option D:** Above search form (less prominent)
+
 ---
 
-### 5. Date Picker Calendar
-**สิ่งที่ต้องทำ:**
-```bash
-npm install react-day-picker date-fns
-```
+### 2. Add Arrival/Departure Times to All Trains
+
+Currently only T001 has `stopSchedules`. Update remaining trains in `lib/trainData.ts`:
 
 ```typescript
-// สร้างไฟล์ใหม่:
-- [ ] components/DatePicker.tsx - Custom calendar
-- [ ] components/Calendar.tsx - Calendar UI
+// T002 - Bangkok to Hat Yai
+{
+  id: 'T002',
+  // ... existing fields ...
+  stopSchedules: [
+    { stationId: 'BKK', arrivalTime: null, departureTime: '14:45' },
+    { stationId: 'SRT', arrivalTime: '19:30', departureTime: '19:40' },
+    { stationId: 'HYI', arrivalTime: '05:30', departureTime: null },
+  ],
+}
 
-// แก้ไฟล์เดิม:
-- [ ] components/TrainSearch.tsx - แทนที่ native date input
+// T003 - Bangkok to Ubon Ratchathani
+{
+  id: 'T003',
+  // ... existing fields ...
+  stopSchedules: [
+    { stationId: 'BKK', arrivalTime: null, departureTime: '20:30' },
+    { stationId: 'NMA', arrivalTime: '23:45', departureTime: '23:50' },
+    { stationId: 'KKN', arrivalTime: '03:15', departureTime: '03:20' },
+    { stationId: 'UBN', arrivalTime: '06:00', departureTime: null },
+  ],
+}
+
+// Continue for all trains...
 ```
-
-**ฟีเจอร์:**
-- แสดง calendar popup
-- Disable วันที่ผ่านไป
-- Keyboard accessible
-- Mobile friendly
 
 ---
 
-### 6. Multi-language Support (i18n)
-**สิ่งที่ต้องทำ:**
+### 3. Implement Accessibility Enhancements
+
+Based on `ACCESSIBILITY_CHECKLIST.md`, priority enhancements:
+
+#### Phase 1: Critical (High Priority)
+
+1. **Enhanced Color Contrast (AAA: 7:1)**
+   ```css
+   /* tailwind.config.ts - update colors */
+   colors: {
+     gray: {
+       600: '#3a4556', // Darker for 7:1 contrast
+       700: '#2d3748',
+     }
+   }
+   ```
+
+2. **Screen Reader Live Regions**
+   ```tsx
+   // Add to TrainResults.tsx
+   <div aria-live="polite" aria-atomic="true" className="sr-only">
+     พบรถไฟ {trains.length} ขบวน สำหรับเส้นทาง {origin} ถึง {destination}
+   </div>
+   ```
+
+3. **Reduced Motion Support**
+   ```css
+   /* globals.css */
+   @media (prefers-reduced-motion: reduce) {
+     *, *::before, *::after {
+       animation-duration: 0.01ms !important;
+       animation-iteration-count: 1 !important;
+       transition-duration: 0.01ms !important;
+     }
+   }
+   ```
+
+#### Phase 2: Important (Medium Priority)
+
+4. **Keyboard Shortcuts**
+   ```tsx
+   // Add to app/page.tsx
+   useEffect(() => {
+     const handleKeyboard = (e: KeyboardEvent) => {
+       if (e.altKey && e.key === 's') {
+         searchFormRef.current?.focus();
+       }
+       if (e.key === 'Escape') {
+         closeAllModals();
+       }
+     };
+     window.addEventListener('keydown', handleKeyboard);
+     return () => window.removeEventListener('keydown', handleKeyboard);
+   }, []);
+   ```
+
+5. **Enhanced Focus Indicators**
+   ```css
+   /* globals.css */
+   :focus-visible {
+     outline: 3px solid #3b82f6;
+     outline-offset: 2px;
+     border-radius: 4px;
+     box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1);
+   }
+   ```
+
+---
+
+## 📊 Visual Guide: PopularRoutes Placement
+
+```
+┌─────────────────────────────────────────┐
+│  HEADER / NAVIGATION                    │
+└─────────────────────────────────────────┘
+
+┌─────────────────────────────────────────┐
+│  🔍 SEARCH FORM                         │
+│  [Origin] → [Destination] [Search]      │
+└─────────────────────────────────────────┘
+
+         ⬇️ IF NO RESULTS YET ⬇️
+
+┌─────────────────────────────────────────┐
+│  📈 เส้นทางยอดนิยม (POPULAR ROUTES)      │
+│  ┌───────────────────────────────────┐  │
+│  │ 1. กรุงเทพ → เชียงใหม่  📈  1,847 │  │
+│  │    11ชม. 45นาที • ฿650-1,850     │  │
+│  ├───────────────────────────────────┤  │
+│  │ 2. กรุงเทพ → หาดใหญ่   📈  1,523 │  │
+│  │    14ชม. 45นาที • ฿750-2,150     │  │
+│  ├───────────────────────────────────┤  │
+│  │ 3. กรุงเทพ → อุบลราชธานี ➡️  892 │  │
+│  │    9ชม. 30นาที • ฿450-1,200      │  │
+│  └───────────────────────────────────┘  │
+│  💡 ข้อมูลอัพเดททุก 5 วินาที • LIVE   │
+└─────────────────────────────────────────┘
+
+         ⬇️ OR IF RESULTS EXIST ⬇️
+
+┌─────────────────────────────────────────┐
+│  🚂 TRAIN RESULTS                        │
+│  ┌─────────────────────────────────┐    │
+│  │ ด่วนพิเศษกรุงเทพ-เชียงใหม่        │    │
+│  │ 08:30 → 20:15 (11ชม. 45นาที)     │    │
+│  │ [ดูรายละเอียด] ▼                 │    │
+│  │                                   │    │
+│  │ ตารางเวลา:                        │    │
+│  │ • กรุงเทพ          ออก: 08:30    │    │
+│  │ • พระนครศรีอยุธยา  ถึง: 09:30     │    │
+│  │                   ออก: 09:35    │    │ ⬅️ NEW!
+│  │ • ลำปาง           ถึง: 17:45     │    │
+│  │                   ออก: 17:50    │    │
+│  │ • เชียงใหม่         ถึง: 20:15    │    │
+│  └─────────────────────────────────┘    │
+└─────────────────────────────────────────┘
+```
+
+---
+
+## 🎯 Quick Implementation Guide
+
+### Step 1: Add Popular Routes to Homepage (5 minutes)
+
+1. Open `app/page.tsx`
+2. Import PopularRoutes component
+3. Add click handler
+4. Place component below search form
+5. Test clicking routes auto-fills search
+
+### Step 2: Complete Train Data (15 minutes)
+
+1. Open `lib/trainData.ts`
+2. Add `stopSchedules` to T002, T003, T004, etc.
+3. Use realistic Thailand timezone times
+4. Build and test
+
+### Step 3: Basic Accessibility (10 minutes)
+
+1. Add `prefers-reduced-motion` to `globals.css`
+2. Add screen reader live region to TrainResults
+3. Enhance focus styles in `globals.css`
+4. Test with keyboard navigation
+
+---
+
+## 📝 Testing Checklist
+
+### Arrival/Departure Times
+- [ ] Expand train T001 details
+- [ ] Click "ตารางเวลา" tab
+- [ ] Verify intermediate stops show two times:
+  - [ ] "ถึง: 09:30" (arrival)
+  - [ ] "ออก: 09:35" (departure)
+- [ ] Origin shows only departure time
+- [ ] Destination shows only arrival time
+
+### Popular Routes
+- [ ] Visit homepage without searching
+- [ ] See popular routes section
+- [ ] Verify "LIVE" indicator is pulsing
+- [ ] Click a route
+- [ ] Confirm search form auto-fills
+- [ ] Watch search counts increment (every 5s)
+
+### Accessibility
+- [ ] Navigate entire site using only Tab key
+- [ ] Verify focus indicators visible
+- [ ] Test with screen reader (NVDA/VoiceOver)
+- [ ] Zoom to 200% - no loss of functionality
+- [ ] Check color contrast with DevTools
+
+---
+
+## 🚀 Ready to Deploy
+
+After completing above steps:
+
 ```bash
-npm install next-intl
-```
+# Build to verify
+npm run build
 
-```typescript
-// สร้างไฟล์ใหม่:
-- [ ] messages/th.json - ภาษาไทย
-- [ ] messages/en.json - ภาษาอังกฤษ
-- [ ] components/LanguageSwitcher.tsx
-- [ ] middleware.ts - Locale detection
+# Commit changes
+git add .
+git commit -m "Integrate popular routes and complete train schedules"
 
-// แก้ไฟล์เดิม:
-- [ ] next.config.ts - เพิ่ม i18n config
-- [ ] app/layout.tsx - ใส่ IntlProvider
-- [ ] แปลงข้อความทั้งหมดเป็น useTranslations()
-```
-
-**ภาษาที่รองรับ:**
-- ไทย (default)
-- English
-
----
-
-### 7. PWA Configuration
-**สิ่งที่ต้องทำ:**
-```bash
-npm install next-pwa @ducanh2912/next-pwa
-```
-
-```typescript
-// สร้างไฟล์ใหม่:
-- [ ] public/manifest.json
-- [ ] public/icons/ - PWA icons (192x192, 512x512)
-- [ ] public/sw.js - Service Worker
-- [ ] app/offline/page.tsx - Offline page
-
-// แก้ไฟล์เดิม:
-- [ ] next.config.ts - เพิ่ม PWA config
-- [ ] app/layout.tsx - เพิ่ม manifest link
-```
-
-**ฟีเจอร์:**
-- Install app on mobile
-- Offline support
-- Cache static assets
-- Background sync
-
----
-
-### 8. Train Route Map
-**สิ่งที่ต้องทำ:**
-```bash
-npm install leaflet react-leaflet
-npm install -D @types/leaflet
-```
-
-```typescript
-// สร้างไฟล์ใหม่:
-- [ ] components/RouteMap.tsx - แผนที่
-- [ ] components/MapMarker.tsx - Marker สถานี
-
-// แก้ไฟล์เดิม:
-- [ ] components/TrainCard.tsx - เพิ่มแท็บ "แผนที่"
-- [ ] lib/trainData.ts - เพิ่ม coordinates ให้ stations
-```
-
-**ฟีเจอร์:**
-- แสดงเส้นทาง
-- แสดงจุดจอดทั้งหมด
-- คำนวณระยะทาง
-- Zoom in/out
-
----
-
-### 9. Performance Optimization (รอบสุดท้าย)
-**เป้าหมาย:** Lighthouse Performance > 90
-
-**สิ่งที่ต้องทำ:**
-```typescript
-// 1. Code Splitting
-- [ ] Dynamic imports สำหรับ components ใหญ่
-- [ ] Route-based splitting
-
-// 2. Image Optimization
-- [ ] ใช้ next/image แทน <img>
-- [ ] Lazy load images
-- [ ] WebP format
-
-// 3. Font Optimization
-- [ ] Preload fonts
-- [ ] font-display: swap
-- [ ] Subset fonts
-
-// 4. CSS Optimization
-- [ ] Critical CSS inline
-- [ ] Remove unused CSS
-- [ ] Minify CSS
-
-// 5. JavaScript Optimization
-- [ ] Tree shaking
-- [ ] Code minification
-- [ ] Remove console.logs
-
-// 6. Caching
-- [ ] Set cache headers
-- [ ] Service Worker caching
-- [ ] API response caching
-
-// 7. Bundle Analysis
-npm install @next/bundle-analyzer
-- [ ] Analyze bundle size
-- [ ] ลด dependencies ที่ไม่จำเป็น
-```
-
-**เป้าหมาย Metrics:**
-| Metric | Current | Target |
-|--------|---------|--------|
-| Performance | 66 | 90+ |
-| FCP | 1.4s | <1s |
-| LCP | 14.1s | <2.5s |
-| TBT | 2,310ms | <300ms |
-| CLS | 0.033 | <0.1 ✅ |
-
----
-
-## 🎯 ลำดับการทำงานที่แนะนำ
-
-### Phase 1: Quick Wins (2-3 ชั่วโมง)
-1. ✅ Toast Notifications (เสร็จแล้ว)
-2. ⏳ Advanced Filters - เพิ่ม sort และ amenities
-3. ⏳ Empty State Illustrations
-4. ⏳ Favorite Routes
-
-### Phase 2: Medium Features (3-4 ชั่วโมง)
-5. ⏳ Dark Mode
-6. ⏳ Date Picker Calendar
-
-### Phase 3: Complex Features (4-6 ชั่วโมง)
-7. ⏳ Multi-language (i18n)
-8. ⏳ PWA Configuration
-9. ⏳ Train Route Map
-
-### Phase 4: Performance (2-3 ชั่วโมง)
-10. ⏳ Performance Optimization ให้ได้ > 90 คะแนน
-
----
-
-## 📦 Dependencies ที่ต้องติดตั้ง
-
-```bash
-# Dark Mode
-npm install next-themes
-
-# Date Picker
-npm install react-day-picker date-fns
-
-# i18n
-npm install next-intl
-
-# PWA
-npm install @ducanh2912/next-pwa
-
-# Maps
-npm install leaflet react-leaflet
-npm install -D @types/leaflet
-
-# Bundle Analysis
-npm install @next/bundle-analyzer
+# Push to GitHub (triggers Vercel deployment)
+git push origin main
 ```
 
 ---
 
-## 🚀 วิธีทำต่อ
+## 📚 Reference Documents
 
-### ให้ Claude ทำต่อ:
-เพียงบอก: **"ทำ [feature name] ต่อ"**
-
-ตัวอย่าง:
-- "ทำ Advanced Filters ต่อ"
-- "ทำ Dark Mode ต่อ"
-- "ทำ Favorite Routes ต่อ"
-
-หรือบอก: **"ทำให้ครบทั้งหมด"** - Claude จะทำทีละ feature จนครบ
+- **Accessibility Guide:** `ACCESSIBILITY_CHECKLIST.md`
+- **Component Code:** `components/PopularRoutes.tsx`
+- **Type Definitions:** `lib/types.ts`
+- **Train Data:** `lib/trainData.ts`
 
 ---
 
-## 📝 หมายเหตุ
-
-- งานทั้งหมดนี้ **ไม่รวม Backend** (รอ Database Schema)
-- **Performance** ทำสุดท้ายเพื่อไม่ให้ฟีเจอร์ใหม่ทำให้คะแนนตกอีก
-- แต่ละ feature มี **Accessibility (WCAG 2.2 AAA)** ครบถ้วน
-- ใช้ **TypeScript** และ **Tailwind CSS** ทั้งหมด
-
----
-
-**สถานะปัจจุบัน:** 1/10 features เสร็จ (10%)
-**เป้าหมาย:** ทำให้ครบ 10/10 features (100%)
+**Need Help?** Check the accessibility checklist for detailed implementation steps!
