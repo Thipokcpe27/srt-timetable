@@ -213,9 +213,17 @@ export default function TrainCard({ train, isSelected = false, onToggleCompare }
         )}
       </div>
 
-      {/* Expanded Content - Combined View */}
+      {/* Expanded Content - Single Tab with Both Sections */}
       {isExpanded && (
         <div id={`${cardId}-details`} className="border-t border-gray-200/50 animate-slide-down">
+          {/* Single Tab Header */}
+          <div className="flex border-b border-gray-200/50 backdrop-blur-sm bg-gray-50/40" role="tablist" aria-label="ข้อมูลรายละเอียดรถไฟ">
+            <div className="flex-1 px-4 md:px-6 py-3 md:py-3.5 text-xs md:text-sm font-semibold text-blue-700 border-b-2 border-blue-600 bg-white/60 flex items-center justify-center gap-1 md:gap-2">
+              <Armchair className="w-3 h-3 md:w-4 md:h-4" aria-hidden="true" />
+              <span className="whitespace-nowrap">รายละเอียดและชั้นที่นั่ง</span>
+            </div>
+          </div>
+
           <div className="p-6 space-y-6">
             {/* Timetable Section */}
             <div>
