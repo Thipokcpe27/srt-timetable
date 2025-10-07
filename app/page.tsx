@@ -9,6 +9,7 @@ import TrainResults from '@/components/TrainResults';
 import LoadingSkeleton from '@/components/LoadingSkeleton';
 import SearchHistory from '@/components/SearchHistory';
 import EmptyState from '@/components/EmptyState';
+import PopularRoutes from '@/components/PopularRoutes';
 import { Train as TrainIcon, Clock, Shield, CreditCard, Headphones } from 'lucide-react';
 import AccessibilityToolbar from '@/components/AccessibilityToolbar';
 import TrainComparison from '@/components/TrainComparison';
@@ -79,6 +80,13 @@ export default function Home() {
       return;
     }
     setShowComparison(true);
+  };
+
+  const handlePopularRouteClick = (from: string, to: string) => {
+    const params = { origin: from, destination: to };
+    setInitialSearchValues(params);
+    handleSearch(params);
+    showToast('info', `กำลังค้นหาเส้นทาง ${from} → ${to}`);
   };
 
   return (
@@ -153,9 +161,13 @@ export default function Home() {
             <TrainSearch onSearch={handleSearch} isLoading={isLoading} initialValues={initialSearchValues} />
           </div>
 
-          {/* Search History */}
+          {/* Popular Routes & Search History */}
           {!isLoading && searchResults === null && (
-            <div className="max-w-4xl mx-auto mb-12 md:mb-16 relative z-10">
+            <div className="max-w-4xl mx-auto mb-12 md:mb-16 relative z-10 space-y-8">
+              {/* Popular Routes - Real-time */}
+              <PopularRoutes onRouteClick={handlePopularRouteClick} />
+              
+              {/* Search History */}
               <SearchHistory onSelectHistory={(item) => {
                 setInitialSearchValues(item);
                 handleSearch(item);
