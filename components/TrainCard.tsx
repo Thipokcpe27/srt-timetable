@@ -213,53 +213,17 @@ export default function TrainCard({ train, isSelected = false, onToggleCompare }
         )}
       </div>
 
-      {/* Expanded Content with Tabs */}
+      {/* Expanded Content - Combined View */}
       {isExpanded && (
         <div id={`${cardId}-details`} className="border-t border-gray-200/50 animate-slide-down">
-          {/* Tab Headers */}
-          <div className="flex border-b border-gray-200/50 backdrop-blur-sm bg-gray-50/40 overflow-x-auto" role="tablist" aria-label="ข้อมูลรายละเอียดรถไฟ">
-            <button
-              onClick={() => setActiveTab('timetable')}
-              role="tab"
-              aria-selected={activeTab === 'timetable'}
-              aria-controls={`${cardId}-timetable`}
-              id={`${cardId}-timetable-tab`}
-              className={`flex-1 min-w-fit px-4 md:px-6 py-3 md:py-3.5 text-xs md:text-sm font-semibold transition-all flex items-center justify-center gap-1 md:gap-2 ${
-                activeTab === 'timetable'
-                  ? 'text-blue-700 border-b-2 border-blue-600 bg-white/60'
-                  : 'text-gray-700 hover:text-gray-900 hover:bg-white/40'
-              }`}
-            >
-              <List className="w-3 h-3 md:w-4 md:h-4" aria-hidden="true" />
-              <span className="whitespace-nowrap">ตารางเวลา</span>
-            </button>
-            <button
-              onClick={() => setActiveTab('classes')}
-              role="tab"
-              aria-selected={activeTab === 'classes'}
-              aria-controls={`${cardId}-classes`}
-              id={`${cardId}-classes-tab`}
-              className={`flex-1 min-w-fit px-4 md:px-6 py-3 md:py-3.5 text-xs md:text-sm font-semibold transition-all flex items-center justify-center gap-1 md:gap-2 ${
-                activeTab === 'classes'
-                  ? 'text-blue-700 border-b-2 border-blue-600 bg-white/60'
-                  : 'text-gray-700 hover:text-gray-900 hover:bg-white/40'
-              }`}
-            >
-              <Armchair className="w-3 h-3 md:w-4 md:h-4" aria-hidden="true" />
-              <span className="whitespace-nowrap">ชั้นที่นั่ง</span>
-            </button>
-          </div>
-
-          {/* Tab Content */}
-          <div className="p-6">
-            {/* Timetable Tab */}
-            {activeTab === 'timetable' && (
-              <div
-                id={`${cardId}-timetable`}
-                role="tabpanel"
-                aria-labelledby={`${cardId}-timetable-tab`}
-                className="space-y-2"
-              >
+          <div className="p-6 space-y-6">
+            {/* Timetable Section */}
+            <div>
+              <div className="flex items-center gap-2 mb-4">
+                <List className="w-5 h-5 text-blue-600" aria-hidden="true" />
+                <h4 className="text-lg font-bold text-gray-900">ตารางเวลา</h4>
+              </div>
+              <div className="space-y-2">
                 {allStops.map((stop, idx) => (
                   <div
                     key={idx}
@@ -289,16 +253,15 @@ export default function TrainCard({ train, isSelected = false, onToggleCompare }
                   </div>
                 ))}
               </div>
-            )}
+            </div>
 
-            {/* Classes Tab */}
-            {activeTab === 'classes' && (
-              <div
-                id={`${cardId}-classes`}
-                role="tabpanel"
-                aria-labelledby={`${cardId}-classes-tab`}
-                className="space-y-3"
-              >
+            {/* Classes Section */}
+            <div>
+              <div className="flex items-center gap-2 mb-4">
+                <Armchair className="w-5 h-5 text-blue-600" aria-hidden="true" />
+                <h4 className="text-lg font-bold text-gray-900">ชั้นที่นั่ง</h4>
+              </div>
+              <div className="space-y-3">
                 {train.classes.map((trainClass) => {
                   const availability = getAvailabilityStatus(trainClass.available, trainClass.totalSeats);
                   const canBook = trainClass.available > 0;
@@ -395,8 +358,7 @@ export default function TrainCard({ train, isSelected = false, onToggleCompare }
                   );
                 })}
               </div>
-            )}
-
+            </div>
           </div>
         </div>
       )}
