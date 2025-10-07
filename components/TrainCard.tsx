@@ -90,7 +90,7 @@ export default function TrainCard({ train, isSelected = false, onToggleCompare }
       aria-labelledby={`${cardId}-title`}
     >
       {/* Header */}
-      <header className="backdrop-blur-sm bg-gradient-to-r from-blue-50/30 to-indigo-50/30 border-b border-gray-200/30 px-4 md:px-6 py-3 md:py-4">
+      <header className="backdrop-blur-sm bg-gradient-to-r from-blue-100/70 to-indigo-100/70 border-b border-blue-200/50 px-4 md:px-6 py-3 md:py-4">
         <div className="flex flex-col sm:flex-row items-start sm:items-start justify-between gap-3">
           <div className="flex-1 w-full sm:w-auto">
             {/* Badge and Train Number on top */}
@@ -138,7 +138,7 @@ export default function TrainCard({ train, isSelected = false, onToggleCompare }
               <div className="absolute w-3 h-3 rounded-full bg-blue-600 border-2 border-white shadow-lg"></div>
             </div>
             {/* Distance Information */}
-            <div className="text-xs mt-4 font-semibold">
+            <div className="text-xs md:text-sm mt-4 font-semibold">
               <span className="text-blue-600">
                 ระยะทาง: ~{(() => {
                   // Extract hours and minutes from Thai format "XXชม. XXนาที"
