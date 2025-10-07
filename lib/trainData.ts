@@ -47,6 +47,12 @@ export const trains: Train[] = [
     arrivalTime: '20:15',
     duration: '11ชม. 45นาที',
     stops: ['AYA', 'LPG'],
+    stopSchedules: [
+      { stationId: 'BKK', arrivalTime: null, departureTime: '08:30' },
+      { stationId: 'AYA', arrivalTime: '09:30', departureTime: '09:35' },
+      { stationId: 'LPG', arrivalTime: '17:45', departureTime: '17:50' },
+      { stationId: 'CNX', arrivalTime: '20:15', departureTime: null },
+    ],
     classes: [
       {
         id: 'first',

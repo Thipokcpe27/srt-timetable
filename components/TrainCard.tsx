@@ -76,12 +76,25 @@ export default function TrainCard({ train, isSelected = false, onToggleCompare }
   const maxPrice = Math.max(...prices);
   const trainType = getTrainType();
 
-  // Generate timetable stops
-  const allStops = [
-    { station: train.origin, time: train.departureTime, type: 'departure' },
-    ...train.stops.map(stop => ({ station: stop, time: '-', type: 'stop' })),
-    { station: train.destination, time: train.arrivalTime, type: 'arrival' }
-  ];
+  // Generate timetable stops with arrival/departure times
+  const allStops = train.stopSchedules 
+    ? train.stopSchedules.map((schedule, idx) => {
+        const isOrigin = idx === 0;
+        const isDestination = idx === train.stopSchedules!.length - 1;
+        
+        return {
+          station: schedule.stationId,
+          time: schedule.departureTime || schedule.arrivalTime || '-',
+          arrivalTime: schedule.arrivalTime,
+          departureTime: schedule.departureTime,
+          type: isOrigin ? 'departure' : isDestination ? 'arrival' : 'stop',
+        };
+      })
+    : [
+        { station: train.origin, time: train.departureTime, type: 'departure', arrivalTime: null, departureTime: train.departureTime },
+        ...train.stops.map(stop => ({ station: stop, time: '-', type: 'stop', arrivalTime: null, departureTime: null })),
+        { station: train.destination, time: train.arrivalTime, type: 'arrival', arrivalTime: train.arrivalTime, departureTime: null },
+      ];
 
   return (
     <article
@@ -275,16 +288,29 @@ export default function TrainCard({ train, isSelected = false, onToggleCompare }
                       <div className={`w-2 h-2 rounded-full ${
                         stop.type === 'departure' ? 'bg-green-500' :
                         stop.type === 'arrival' ? 'bg-red-500' : 'bg-gray-400'
-                      }`}></div>
+                      }`} aria-hidden="true"></div>
                       <div>
                         <div className="font-semibold text-gray-900">{getStationName(stop.station)}</div>
                         {stop.type === 'departure' && <div className="text-xs text-gray-600">สถานีต้นทาง</div>}
                         {stop.type === 'arrival' && <div className="text-xs text-gray-600">สถานีปลายทาง</div>}
+                        {stop.type === 'stop' && <div className="text-xs text-gray-600">สถานีแวะจอด</div>}
                       </div>
                     </div>
                     <div className="text-right">
-                      <div className="font-bold text-gray-900">{stop.time}</div>
-                      {stop.type === 'stop' && <div className="text-xs text-gray-600">แวะจอด</div>}
+                      {stop.type === 'stop' && stop.arrivalTime && stop.departureTime ? (
+                        <div className="space-y-1">
+                          <div className="text-sm">
+                            <span className="text-xs text-gray-600">ถึง: </span>
+                            <span className="font-bold text-gray-900">{stop.arrivalTime}</span>
+                          </div>
+                          <div className="text-sm">
+                            <span className="text-xs text-gray-600">ออก: </span>
+                            <span className="font-bold text-gray-900">{stop.departureTime}</span>
+                          </div>
+                        </div>
+                      ) : (
+                        <div className="font-bold text-gray-900">{stop.time}</div>
+                      )}
                     </div>
                   </div>
                 ))}

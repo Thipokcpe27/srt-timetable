@@ -25,6 +25,13 @@ export interface Amenity {
   available: boolean;
 }
 
+// Stop schedule types
+export interface StopSchedule {
+  stationId: string;
+  arrivalTime: string | null; // null for origin
+  departureTime: string | null; // null for destination
+}
+
 // Train types
 export interface Train {
   id: string;
@@ -35,7 +42,8 @@ export interface Train {
   departureTime: string;
   arrivalTime: string;
   duration: string;
-  stops: string[];
+  stops: string[]; // deprecated - use stopSchedules instead
+  stopSchedules?: StopSchedule[]; // new field with arrival/departure times
   classes: TrainClass[];
   amenities: Amenity[];
   operatingDays: string[];
