@@ -138,9 +138,9 @@ export default function TrainCard({ train, isSelected = false, onToggleCompare }
               <div className="absolute w-3 h-3 rounded-full bg-blue-600 border-2 border-white shadow-lg"></div>
             </div>
             {/* Distance Information */}
-            <div className="text-xs text-gray-600 mt-4 font-medium">
+            <div className="text-xs mt-4 font-semibold">
               <span className="text-blue-600">
-                ~{(() => {
+                ระยะทาง: ~{(() => {
                   // Extract hours and minutes from Thai format "XXชม. XXนาที"
                   const hourMatch = train.duration.match(/(\d+)ชม\./);
                   const minuteMatch = train.duration.match(/(\d+)นาที/);
@@ -148,8 +148,15 @@ export default function TrainCard({ train, isSelected = false, onToggleCompare }
                   const minutes = minuteMatch ? parseInt(minuteMatch[1]) : 0;
                   // Estimate distance: average train speed ~80 km/h
                   const distance = Math.round((hours + minutes / 60) * 80);
-                  return distance;
-                })()} กม.
+                  return distance > 0 ? distance : 'N/A';
+                })()} {(() => {
+                  const hourMatch = train.duration.match(/(\d+)ชม\./);
+                  const minuteMatch = train.duration.match(/(\d+)นาที/);
+                  const hours = hourMatch ? parseInt(hourMatch[1]) : 0;
+                  const minutes = minuteMatch ? parseInt(minuteMatch[1]) : 0;
+                  const distance = Math.round((hours + minutes / 60) * 80);
+                  return distance > 0 ? 'กม.' : '';
+                })()}
               </span>
             </div>
           </div>
