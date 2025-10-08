@@ -13,7 +13,7 @@ import PopularTrains from '@/components/PopularTrains';
 import TouristTrains from '@/components/TouristTrains';
 import WelcomeModal from '@/components/WelcomeModal';
 import VisitCounter from '@/components/VisitCounter';
-import { Train as TrainIcon, Clock, Shield, CreditCard, Headphones, Mail, Phone, MapPin, Facebook, Twitter, Instagram, Youtube, Heart } from 'lucide-react';
+import { Train as TrainIcon, Clock, Shield, CreditCard, Headphones, Mail, Phone, MapPin, Facebook, Twitter, Instagram, Youtube, Heart, Ticket } from 'lucide-react';
 import AccessibilityToolbar from '@/components/AccessibilityToolbar';
 import TrainComparison from '@/components/TrainComparison';
 import { useToast } from '@/components/ToastContainer';
@@ -157,12 +157,14 @@ export default function Home() {
                 วิธีใช้งาน
               </a>
               <a 
-                href="#popular-trains" 
+                href="https://www.dticket.railway.co.th/DTicketPublic/th-TH/Home" 
+                target="_blank"
+                rel="noopener noreferrer"
                 className="text-sm font-medium text-gray-700 hover:text-blue-600 transition-colors flex items-center gap-1.5"
-                aria-label="ประวัติการค้นหา"
+                aria-label="จองตั๋วรถไฟ"
               >
-                <Clock className="w-4 h-4" aria-hidden="true" />
-                ประวัติการค้นหา
+                <Ticket className="w-4 h-4" aria-hidden="true" />
+                จองตั๋วรถไฟ
               </a>
             </nav>
 
