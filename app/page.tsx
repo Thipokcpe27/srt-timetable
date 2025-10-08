@@ -9,7 +9,7 @@ import TrainResults from '@/components/TrainResults';
 import LoadingSkeleton from '@/components/LoadingSkeleton';
 import SearchHistory from '@/components/SearchHistory';
 import EmptyState from '@/components/EmptyState';
-import PopularRoutes from '@/components/PopularRoutes';
+import PopularTrains from '@/components/PopularTrains';
 import VisitCounter from '@/components/VisitCounter';
 import { Train as TrainIcon, Clock, Shield, CreditCard, Headphones, Mail, Phone, MapPin, Facebook, Twitter, Instagram, Youtube, Heart } from 'lucide-react';
 import AccessibilityToolbar from '@/components/AccessibilityToolbar';
@@ -83,11 +83,11 @@ export default function Home() {
     setShowComparison(true);
   };
 
-  const handlePopularRouteClick = (from: string, to: string) => {
-    const params = { origin: from, destination: to };
+  const handlePopularTrainClick = (trainId: string, origin: string, destination: string) => {
+    const params = { origin, destination };
     setInitialSearchValues(params);
     handleSearch(params);
-    showToast('info', `กำลังค้นหาเส้นทาง ${from} → ${to}`);
+    showToast('info', `กำลังค้นหา ${origin} → ${destination}`);
   };
 
   return (
@@ -164,9 +164,9 @@ export default function Home() {
 
           {/* Popular Routes & Search History */}
           {!isLoading && searchResults === null && (
-            <div className="max-w-4xl mx-auto mb-12 md:mb-16 relative z-10 space-y-8">
-              {/* Popular Routes - Real-time */}
-              <PopularRoutes onRouteClick={handlePopularRouteClick} />
+            <div className="max-w-6xl mx-auto mb-12 md:mb-16 relative z-10 space-y-8">
+              {/* Popular Trains - Real-time Carousel */}
+              <PopularTrains onTrainClick={handlePopularTrainClick} />
               
               {/* Search History */}
               <SearchHistory onSelectHistory={(item) => {
