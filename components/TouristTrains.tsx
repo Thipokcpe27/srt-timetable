@@ -1,7 +1,7 @@
 'use client';
 
-import { useState } from 'react';
-import { MapPin, Clock, Users, Star, Calendar, ArrowRight, Sparkles } from 'lucide-react';
+import { useState, useEffect, useRef } from 'react';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
 
 interface TouristTrain {
   id: string;
@@ -112,67 +112,129 @@ const touristTrains: TouristTrain[] = [
   },
 ];
 
-const categoryColors = {
-  luxury: 'from-purple-500 to-pink-500',
-  cultural: 'from-amber-500 to-orange-500',
-  scenic: 'from-blue-500 to-cyan-500',
-  adventure: 'from-green-500 to-emerald-500',
-};
-
-const categoryLabels = {
-  luxury: 'หรูหรา',
-  cultural: 'วัฒนธรรม',
-  scenic: 'ธรรมชาติ',
-  adventure: 'ผจญภัย',
-};
-
 export default function TouristTrains() {
-  const [selectedCategory, setSelectedCategory] = useState<string>('all');
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [isAutoPlaying, setIsAutoPlaying] = useState(true);
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
 
-  const filteredTrains = selectedCategory === 'all' 
-    ? touristTrains 
-    : touristTrains.filter(train => train.category === selectedCategory);
+  // Auto-slide functionality
+  useEffect(() => {
+    if (!isAutoPlaying) return;
+
+    const interval = setInterval(() => {
+      handleNext();
+    }, 4000); // Auto-slide every 4 seconds
+
+    return () => clearInterval(interval);
+  }, [isAutoPlaying, currentIndex]);
+
+  const handleNext = () => {
+    setCurrentIndex((prev) => (prev + 1) % touristTrains.length);
+  };
+
+  const handlePrev = () => {
+    setCurrentIndex((prev) => (prev - 1 + touristTrains.length) % touristTrains.length);
+  };
+
+  const handleDotClick = (index: number) => {
+    setCurrentIndex(index);
+    setIsAutoPlaying(false);
+  };
+
+  // Calculate visible cards based on screen size
+  const getVisibleCards = () => {
+    if (typeof window === 'undefined') return 1;
+    if (window.innerWidth >= 1280) return 6; // Desktop: 6 cards
+    if (window.innerWidth >= 1024) return 4; // Large tablet: 4 cards
+    if (window.innerWidth >= 768) return 3;  // Tablet: 3 cards
+    return 2; // Mobile: 2 cards
+  };
 
   return (
     <section id="srt-trips" className="max-w-7xl mx-auto mb-16" aria-labelledby="tourist-trains-heading">
       {/* Header */}
-      <div className="mb-8 text-center">
+      <div className="mb-6 text-center">
         <h2 id="tourist-trains-heading" className="text-2xl md:text-3xl font-bold text-gray-900 mb-2">
           SRT Trips
         </h2>
         <p className="text-gray-600">แพ็คเกจท่องเที่ยวรถไฟพิเศษ</p>
       </div>
 
-      {/* Cards Grid - Simple design with just images and titles */}
-      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
-        {touristTrains.map((train) => (
-          <a
-            key={train.id}
-            href="#"
-            className="group relative overflow-hidden rounded-xl shadow-md hover:shadow-xl transition-all duration-300 hover:-translate-y-1"
+      {/* Carousel Container */}
+      <div className="relative">
+        {/* Navigation Buttons */}
+        <button
+          onClick={() => { handlePrev(); setIsAutoPlaying(false); }}
+          className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-4 z-10 w-10 h-10 bg-white rounded-full shadow-lg hover:shadow-xl transition-all hover:scale-110 flex items-center justify-center text-gray-700 hover:text-blue-600"
+          aria-label="แพ็คเกจก่อนหน้า"
+        >
+          <ChevronLeft className="w-5 h-5" aria-hidden="true" />
+        </button>
+
+        <button
+          onClick={() => { handleNext(); setIsAutoPlaying(false); }}
+          className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-4 z-10 w-10 h-10 bg-white rounded-full shadow-lg hover:shadow-xl transition-all hover:scale-110 flex items-center justify-center text-gray-700 hover:text-blue-600"
+          aria-label="แพ็คเกจถัดไป"
+        >
+          <ChevronRight className="w-5 h-5" aria-hidden="true" />
+        </button>
+
+        {/* Cards Container */}
+        <div className="overflow-hidden" ref={scrollContainerRef}>
+          <div 
+            className="flex transition-transform duration-500 ease-out gap-4"
+            style={{ transform: `translateX(-${currentIndex * (100 / getVisibleCards())}%)` }}
           >
-            {/* Image */}
-            <div className="relative h-48 overflow-hidden bg-gray-200">
-              <img 
-                src={train.image} 
-                alt={train.nameThai}
-                className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
-              />
-              {/* Overlay on hover */}
-              <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-            </div>
-            
-            {/* Title */}
-            <div className="absolute bottom-0 left-0 right-0 p-3 bg-gradient-to-t from-black/80 to-transparent">
-              <h3 className="text-white font-bold text-sm line-clamp-2">
-                {train.nameThai}
-              </h3>
-            </div>
-          </a>
-        ))}
+            {touristTrains.map((train) => (
+              <div
+                key={train.id}
+                className="flex-shrink-0 w-full md:w-1/3 lg:w-1/4 xl:w-1/6"
+                style={{ minWidth: `calc(${100 / getVisibleCards()}% - 1rem)` }}
+              >
+                <a
+                  href="#"
+                  className="block group relative overflow-hidden rounded-xl shadow-md hover:shadow-xl transition-all duration-300 hover:-translate-y-1"
+                >
+                  {/* Image */}
+                  <div className="relative h-48 overflow-hidden bg-gray-200">
+                    <img 
+                      src={train.image} 
+                      alt={train.nameThai}
+                      className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
+                    />
+                    {/* Overlay on hover */}
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                  </div>
+                  
+                  {/* Title */}
+                  <div className="absolute bottom-0 left-0 right-0 p-3 bg-gradient-to-t from-black/80 to-transparent">
+                    <h3 className="text-white font-bold text-sm line-clamp-2">
+                      {train.nameThai}
+                    </h3>
+                  </div>
+                </a>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Dots Indicator */}
+        <div className="flex items-center justify-center gap-2 mt-6">
+          {touristTrains.map((_, index) => (
+            <button
+              key={index}
+              onClick={() => handleDotClick(index)}
+              className={`h-2 rounded-full transition-all ${
+                index === currentIndex 
+                  ? 'w-8 bg-blue-600' 
+                  : 'w-2 bg-gray-300 hover:bg-gray-400'
+              }`}
+              aria-label={`ไปยังแพ็คเกจที่ ${index + 1}`}
+              aria-current={index === currentIndex}
+            />
+          ))}
+        </div>
       </div>
-
-
     </section>
   );
 }
