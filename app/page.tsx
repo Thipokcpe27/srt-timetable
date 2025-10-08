@@ -10,6 +10,8 @@ import LoadingSkeleton from '@/components/LoadingSkeleton';
 import SearchHistory from '@/components/SearchHistory';
 import EmptyState from '@/components/EmptyState';
 import PopularTrains from '@/components/PopularTrains';
+import TouristTrains from '@/components/TouristTrains';
+import WelcomeModal from '@/components/WelcomeModal';
 import VisitCounter from '@/components/VisitCounter';
 import { Train as TrainIcon, Clock, Shield, CreditCard, Headphones, Mail, Phone, MapPin, Facebook, Twitter, Instagram, Youtube, Heart } from 'lucide-react';
 import AccessibilityToolbar from '@/components/AccessibilityToolbar';
@@ -295,10 +297,16 @@ export default function Home() {
                   </button>
                 </div>
               </section>
+
+              {/* SRT Trips - Tourist Trains */}
+              <TouristTrains />
             </div>
           </div>
         </section>
       </main>
+
+      {/* Welcome Modal */}
+      <WelcomeModal />
 
       {/* Footer */}
       <footer className="backdrop-blur-sm bg-gradient-to-b from-white/70 to-gray-50/70 border-t border-white/30 mt-16 relative z-10" role="contentinfo">
