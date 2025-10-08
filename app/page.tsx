@@ -10,7 +10,8 @@ import LoadingSkeleton from '@/components/LoadingSkeleton';
 import SearchHistory from '@/components/SearchHistory';
 import EmptyState from '@/components/EmptyState';
 import PopularRoutes from '@/components/PopularRoutes';
-import { Train as TrainIcon, Clock, Shield, CreditCard, Headphones } from 'lucide-react';
+import VisitCounter from '@/components/VisitCounter';
+import { Train as TrainIcon, Clock, Shield, CreditCard, Headphones, Mail, Phone, MapPin, Facebook, Twitter, Instagram, Youtube, Heart } from 'lucide-react';
 import AccessibilityToolbar from '@/components/AccessibilityToolbar';
 import TrainComparison from '@/components/TrainComparison';
 import { useToast } from '@/components/ToastContainer';
@@ -300,10 +301,125 @@ export default function Home() {
       </main>
 
       {/* Footer */}
-      <footer className="backdrop-blur-sm bg-white/70 border-t border-white/30 mt-16 relative z-10" role="contentinfo">
-        <div className="container mx-auto px-4 py-6">
-          <div className="text-center text-gray-700 text-sm font-medium">
-            <p>© 2025 SRT Timetable - การรถไฟแห่งประเทศไทย</p>
+      <footer className="backdrop-blur-sm bg-gradient-to-b from-white/70 to-gray-50/70 border-t border-white/30 mt-16 relative z-10" role="contentinfo">
+        <div className="container mx-auto px-4 py-12">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
+            {/* About Section */}
+            <div className="md:col-span-1">
+              <div className="flex items-center gap-2 mb-4">
+                <div className="w-10 h-10 bg-gradient-to-br from-blue-600 to-blue-700 rounded-lg flex items-center justify-center shadow-md">
+                  <TrainIcon className="w-5 h-5 text-white" aria-hidden="true" />
+                </div>
+                <h3 className="text-lg font-bold text-gray-900">SRT Timetable</h3>
+              </div>
+              <p className="text-sm text-gray-600 mb-4 leading-relaxed">
+                ระบบค้นหาตารางรถไฟที่สะดวก รวดเร็ว และใช้งานง่าย สำหรับการเดินทางของคุณ
+              </p>
+              <div className="flex gap-3">
+                <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" className="w-9 h-9 bg-blue-600 hover:bg-blue-700 text-white rounded-lg flex items-center justify-center transition-colors" aria-label="Facebook">
+                  <Facebook className="w-4 h-4" aria-hidden="true" />
+                </a>
+                <a href="https://twitter.com" target="_blank" rel="noopener noreferrer" className="w-9 h-9 bg-sky-500 hover:bg-sky-600 text-white rounded-lg flex items-center justify-center transition-colors" aria-label="Twitter">
+                  <Twitter className="w-4 h-4" aria-hidden="true" />
+                </a>
+                <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" className="w-9 h-9 bg-pink-600 hover:bg-pink-700 text-white rounded-lg flex items-center justify-center transition-colors" aria-label="Instagram">
+                  <Instagram className="w-4 h-4" aria-hidden="true" />
+                </a>
+                <a href="https://youtube.com" target="_blank" rel="noopener noreferrer" className="w-9 h-9 bg-red-600 hover:bg-red-700 text-white rounded-lg flex items-center justify-center transition-colors" aria-label="YouTube">
+                  <Youtube className="w-4 h-4" aria-hidden="true" />
+                </a>
+              </div>
+            </div>
+
+            {/* Quick Links */}
+            <div>
+              <h4 className="text-sm font-bold text-gray-900 mb-4 uppercase tracking-wide">ลิงก์ด่วน</h4>
+              <ul className="space-y-2 text-sm">
+                <li>
+                  <a href="#main-content" className="text-gray-600 hover:text-blue-600 transition-colors">หน้าแรก</a>
+                </li>
+                <li>
+                  <a href="#features" className="text-gray-600 hover:text-blue-600 transition-colors">คุณสมบัติ</a>
+                </li>
+                <li>
+                  <a href="#how-it-works" className="text-gray-600 hover:text-blue-600 transition-colors">วิธีใช้งาน</a>
+                </li>
+                <li>
+                  <a href="https://www.railway.co.th" target="_blank" rel="noopener noreferrer" className="text-gray-600 hover:text-blue-600 transition-colors">เว็บไซต์ SRT</a>
+                </li>
+                <li>
+                  <a href="https://www.railway.co.th/TicketBooking" target="_blank" rel="noopener noreferrer" className="text-gray-600 hover:text-blue-600 transition-colors">จองตั๋วออนไลน์</a>
+                </li>
+              </ul>
+            </div>
+
+            {/* Legal Links */}
+            <div>
+              <h4 className="text-sm font-bold text-gray-900 mb-4 uppercase tracking-wide">นโยบาย</h4>
+              <ul className="space-y-2 text-sm">
+                <li>
+                  <a href="#" className="text-gray-600 hover:text-blue-600 transition-colors">เกี่ยวกับเรา</a>
+                </li>
+                <li>
+                  <a href="#" className="text-gray-600 hover:text-blue-600 transition-colors">นโยบายความเป็นส่วนตัว</a>
+                </li>
+                <li>
+                  <a href="#" className="text-gray-600 hover:text-blue-600 transition-colors">ข้อกำหนดการใช้งาน</a>
+                </li>
+                <li>
+                  <a href="#" className="text-gray-600 hover:text-blue-600 transition-colors">คำถามที่พบบ่อย (FAQ)</a>
+                </li>
+                <li>
+                  <a href="#" className="text-gray-600 hover:text-blue-600 transition-colors">ช่วยเหลือ</a>
+                </li>
+              </ul>
+            </div>
+
+            {/* Contact Info */}
+            <div>
+              <h4 className="text-sm font-bold text-gray-900 mb-4 uppercase tracking-wide">ติดต่อเรา</h4>
+              <ul className="space-y-3 text-sm">
+                <li className="flex items-start gap-2">
+                  <MapPin className="w-4 h-4 text-blue-600 flex-shrink-0 mt-0.5" aria-hidden="true" />
+                  <span className="text-gray-600">
+                    การรถไฟแห่งประเทศไทย<br />
+                    ถนนวงศ์สว่าง แขวงบางซื่อ<br />
+                    เขตบางซื่อ กรุงเทพฯ 10800
+                  </span>
+                </li>
+                <li className="flex items-center gap-2">
+                  <Phone className="w-4 h-4 text-blue-600 flex-shrink-0" aria-hidden="true" />
+                  <a href="tel:1690" className="text-gray-600 hover:text-blue-600 transition-colors">
+                    โทร. 1690
+                  </a>
+                </li>
+                <li className="flex items-center gap-2">
+                  <Mail className="w-4 h-4 text-blue-600 flex-shrink-0" aria-hidden="true" />
+                  <a href="mailto:contact@railway.co.th" className="text-gray-600 hover:text-blue-600 transition-colors">
+                    contact@railway.co.th
+                  </a>
+                </li>
+              </ul>
+            </div>
+          </div>
+
+          {/* Bottom Bar */}
+          <div className="border-t border-gray-200/50 pt-6 mt-6">
+            <div className="flex flex-col md:flex-row items-center justify-between gap-4">
+              <p className="text-sm text-gray-600 text-center md:text-left">
+                © 2025 SRT Timetable. สงวนลิขสิทธิ์.
+              </p>
+              <div className="flex items-center gap-2 text-sm text-gray-600">
+                <span>Made with</span>
+                <Heart className="w-4 h-4 text-red-500 fill-red-500" aria-hidden="true" />
+                <span>for Thailand</span>
+              </div>
+              <div className="flex items-center gap-4 text-xs text-gray-500">
+                <span>v1.0.0</span>
+                <span>•</span>
+                <VisitCounter />
+              </div>
+            </div>
           </div>
         </div>
       </footer>

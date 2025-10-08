@@ -131,6 +131,16 @@ html {
   scroll-behavior: smooth;
 }
 
+/* Hide scrollbar but allow scrolling for navigation */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
 /* ============================================
    WCAG 2.2 AAA - Reduced Motion Support
    ============================================ */
