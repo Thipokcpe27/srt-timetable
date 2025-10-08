@@ -123,6 +123,7 @@ export default function Home() {
       <header className="backdrop-blur-md bg-white/80 shadow-sm border-b border-white/20 relative z-10 sticky top-0 min-h-[72px]" role="banner">
         <div className="container mx-auto px-4 py-4 md:py-5">
           <div className="flex items-center justify-between gap-3">
+            {/* Logo */}
             <div className="flex items-center gap-3">
               <div className="w-11 h-11 flex-shrink-0 bg-gradient-to-br from-blue-600 to-blue-700 rounded-xl flex items-center justify-center shadow-lg">
                 <TrainIcon className="w-6 h-6 text-white drop-shadow-md" />
@@ -136,6 +137,34 @@ export default function Home() {
                 </p>
               </div>
             </div>
+
+            {/* Navigation Links - Desktop only */}
+            <nav className="hidden lg:flex items-center gap-6" aria-label="เมนูหลัก">
+              <a 
+                href="#" 
+                className="text-sm font-medium text-gray-700 hover:text-blue-600 transition-colors flex items-center gap-1.5"
+                aria-label="หน้าแรก"
+              >
+                <TrainIcon className="w-4 h-4" aria-hidden="true" />
+                หน้าแรก
+              </a>
+              <a 
+                href="#how-it-works" 
+                className="text-sm font-medium text-gray-700 hover:text-blue-600 transition-colors flex items-center gap-1.5"
+                aria-label="วิธีการใช้งาน"
+              >
+                <Shield className="w-4 h-4" aria-hidden="true" />
+                วิธีใช้งาน
+              </a>
+              <a 
+                href="#popular-trains" 
+                className="text-sm font-medium text-gray-700 hover:text-blue-600 transition-colors flex items-center gap-1.5"
+                aria-label="ประวัติการค้นหา"
+              >
+                <Clock className="w-4 h-4" aria-hidden="true" />
+                ประวัติการค้นหา
+              </a>
+            </nav>
 
             {/* Accessibility Toolbar */}
             <AccessibilityToolbar />
@@ -166,7 +195,7 @@ export default function Home() {
 
           {/* Popular Routes & Search History */}
           {!isLoading && searchResults === null && (
-            <div className="max-w-6xl mx-auto mb-12 md:mb-16 relative z-10 space-y-8">
+            <div id="popular-trains" className="max-w-6xl mx-auto mb-12 md:mb-16 relative z-10 space-y-8">
               {/* Popular Trains - Real-time Carousel */}
               <PopularTrains onTrainClick={handlePopularTrainClick} />
               
@@ -240,7 +269,7 @@ export default function Home() {
               </div>
 
               {/* How It Works Section */}
-              <section className="max-w-5xl mx-auto mb-16" aria-labelledby="how-it-works-heading">
+              <section id="how-it-works" className="max-w-5xl mx-auto mb-16" aria-labelledby="how-it-works-heading">
                 <h3 id="how-it-works-heading" className="text-2xl md:text-3xl font-bold text-center text-gray-900 mb-8 drop-shadow-sm">
                   วิธีการใช้งาน
                 </h3>
