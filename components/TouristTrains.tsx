@@ -183,17 +183,15 @@ export default function TouristTrains() {
         <div className="overflow-hidden" ref={scrollContainerRef}>
           <div 
             className="flex transition-transform duration-500 ease-out gap-4"
-            style={{ transform: `translateX(-${currentIndex * (100 / getVisibleCards())}%)` }}
           >
             {touristTrains.map((train) => (
               <div
                 key={train.id}
-                className="flex-shrink-0 w-full md:w-1/3 lg:w-1/4 xl:w-1/6"
-                style={{ minWidth: `calc(${100 / getVisibleCards()}% - 1rem)` }}
+                className="flex-shrink-0"
               >
                 <a
                   href="#"
-                  className="block group relative overflow-hidden rounded-xl shadow-md hover:shadow-xl transition-all duration-300 hover:-translate-y-1"
+                  className="block group relative overflow-hidden rounded-xl shadow-md hover:shadow-xl transition-all duration-300 hover:-translate-y-1 w-[200px]"
                 >
                   {/* Image */}
                   <div className="relative h-48 overflow-hidden bg-gray-200">
