@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect, useRef } from 'react';
-import { ChevronLeft, ChevronRight, X, MapPin, Clock, DollarSign, Star, Users, Calendar } from 'lucide-react';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
 
 interface TouristTrain {
   id: string;
@@ -46,7 +46,7 @@ const touristTrains: TouristTrain[] = [
     rating: 4.7,
     reviews: 892,
     highlights: ['สะพานข้ามแม่น้ำแคว', 'ถ้ำกระแซ', 'น้ำตกไทรโยคน้อย', 'พิพิธภัณฑ์'],
-    image: 'https://images.unsplash.com/photo-1624807177213-00407502765d?w=600&h=400&fit=crop',
+    image: 'https://www.silpa-mag.com/wp-content/uploads/2023/07/Cover-photo-1-2-696x364.jpg?w=600&h=400&fit=crop',
     available: true,
     category: 'cultural',
   },
@@ -91,7 +91,7 @@ const touristTrains: TouristTrain[] = [
     rating: 4.6,
     reviews: 445,
     highlights: ['วัดโบราณ', 'มรดกโลก', 'ตลาดโบราณ', 'อาหารพื้นเมือง'],
-    image: 'https://images.unsplash.com/photo-1682064346304-50f67c4c590a?w=600&h=400&fit=crop',
+    image: 'https://www.asiakingtravel.com/cuploads/files/Ayutthaya-Aerial.jpg?w=600&h=400&fit=crop',
     available: true,
     category: 'cultural',
   },
@@ -115,34 +115,7 @@ const touristTrains: TouristTrain[] = [
 export default function TouristTrains() {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isAutoPlaying, setIsAutoPlaying] = useState(true);
-  const [selectedTrain, setSelectedTrain] = useState<TouristTrain | null>(null);
-  const [isModalOpen, setIsModalOpen] = useState(false);
   const scrollContainerRef = useRef<HTMLDivElement>(null);
-
-  // Handle modal open
-  const handleTrainClick = (train: TouristTrain) => {
-    setSelectedTrain(train);
-    setIsModalOpen(true);
-    setIsAutoPlaying(false); // Pause carousel when modal opens
-  };
-
-  // Handle modal close
-  const handleCloseModal = () => {
-    setIsModalOpen(false);
-    setSelectedTrain(null);
-    setIsAutoPlaying(true); // Resume carousel when modal closes
-  };
-
-  // Close modal on Escape key
-  useEffect(() => {
-    const handleEscape = (e: KeyboardEvent) => {
-      if (e.key === 'Escape' && isModalOpen) {
-        handleCloseModal();
-      }
-    };
-    window.addEventListener('keydown', handleEscape);
-    return () => window.removeEventListener('keydown', handleEscape);
-  }, [isModalOpen]);
 
   // Auto-slide functionality
   useEffect(() => {
@@ -216,10 +189,9 @@ export default function TouristTrains() {
                 key={train.id}
                 className="flex-shrink-0"
               >
-                <button
-                  onClick={() => handleTrainClick(train)}
-                  className="block group relative overflow-hidden rounded-xl shadow-md hover:shadow-xl transition-all duration-300 hover:-translate-y-1 w-[200px] cursor-pointer text-left"
-                  aria-label={`ดูรายละเอียด ${train.nameThai}`}
+                <a
+                  href="#"
+                  className="block group relative overflow-hidden rounded-xl shadow-md hover:shadow-xl transition-all duration-300 hover:-translate-y-1 w-[200px]"
                 >
                   {/* Image */}
                   <div className="relative h-48 overflow-hidden bg-gray-200">
@@ -238,7 +210,7 @@ export default function TouristTrains() {
                       {train.nameThai}
                     </h3>
                   </div>
-                </button>
+                </a>
               </div>
             ))}
           </div>
@@ -261,129 +233,6 @@ export default function TouristTrains() {
           ))}
         </div>
       </div>
-
-      {/* Modal */}
-      {isModalOpen && selectedTrain && (
-        <div 
-          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-in fade-in duration-200"
-          onClick={handleCloseModal}
-          role="dialog"
-          aria-modal="true"
-          aria-labelledby="modal-title"
-        >
-          <div 
-            className="relative w-full max-w-3xl bg-white rounded-2xl shadow-2xl overflow-hidden animate-in zoom-in-95 duration-300"
-            onClick={(e) => e.stopPropagation()}
-          >
-            {/* Close Button */}
-            <button
-              onClick={handleCloseModal}
-              className="absolute top-4 right-4 z-10 w-10 h-10 bg-white/90 hover:bg-white rounded-full shadow-lg flex items-center justify-center transition-all hover:scale-110"
-              aria-label="ปิดหน้าต่าง"
-            >
-              <X className="w-5 h-5 text-gray-700" />
-            </button>
-
-            {/* Image Header */}
-            <div className="relative h-64 overflow-hidden bg-gray-200">
-              <img 
-                src={selectedTrain.image} 
-                alt={selectedTrain.nameThai}
-                className="w-full h-full object-cover"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent"></div>
-              <div className="absolute bottom-6 left-6 right-6">
-                <h2 id="modal-title" className="text-3xl font-bold text-white mb-2">
-                  {selectedTrain.nameThai}
-                </h2>
-                <p className="text-lg text-white/90">{selectedTrain.name}</p>
-              </div>
-            </div>
-
-            {/* Content */}
-            <div className="p-6 max-h-[60vh] overflow-y-auto">
-              {/* Rating & Availability */}
-              <div className="flex items-center justify-between mb-6">
-                <div className="flex items-center gap-4">
-                  <div className="flex items-center gap-1">
-                    <Star className="w-5 h-5 text-yellow-500 fill-yellow-500" />
-                    <span className="text-lg font-bold text-gray-900">{selectedTrain.rating}</span>
-                    <span className="text-sm text-gray-600">({selectedTrain.reviews} รีวิว)</span>
-                  </div>
-                  <span className={`px-3 py-1 rounded-full text-sm font-semibold ${
-                    selectedTrain.available 
-                      ? 'bg-green-100 text-green-700' 
-                      : 'bg-red-100 text-red-700'
-                  }`}>
-                    {selectedTrain.available ? '✓ มีที่ว่าง' : '✗ เต็มแล้ว'}
-                  </span>
-                </div>
-                <div className="text-right">
-                  <div className="text-sm text-gray-600">เริ่มต้น</div>
-                  <div className="text-2xl font-bold text-blue-600">{selectedTrain.price}</div>
-                </div>
-              </div>
-
-              {/* Info Grid */}
-              <div className="grid grid-cols-2 gap-4 mb-6">
-                <div className="flex items-start gap-3 p-4 bg-gray-50 rounded-xl">
-                  <MapPin className="w-5 h-5 text-blue-600 flex-shrink-0 mt-0.5" />
-                  <div>
-                    <div className="text-sm text-gray-600 mb-1">เส้นทาง</div>
-                    <div className="font-semibold text-gray-900">{selectedTrain.route}</div>
-                  </div>
-                </div>
-                <div className="flex items-start gap-3 p-4 bg-gray-50 rounded-xl">
-                  <Clock className="w-5 h-5 text-blue-600 flex-shrink-0 mt-0.5" />
-                  <div>
-                    <div className="text-sm text-gray-600 mb-1">ระยะเวลา</div>
-                    <div className="font-semibold text-gray-900">{selectedTrain.duration}</div>
-                  </div>
-                </div>
-              </div>
-
-              {/* Description */}
-              <div className="mb-6">
-                <h3 className="text-lg font-bold text-gray-900 mb-3">รายละเอียด</h3>
-                <p className="text-gray-700 leading-relaxed">{selectedTrain.description}</p>
-              </div>
-
-              {/* Highlights */}
-              <div className="mb-6">
-                <h3 className="text-lg font-bold text-gray-900 mb-3">ไฮไลท์ของทริป</h3>
-                <div className="grid grid-cols-2 gap-2">
-                  {selectedTrain.highlights.map((highlight, index) => (
-                    <div key={index} className="flex items-center gap-2 text-gray-700">
-                      <div className="w-2 h-2 bg-blue-600 rounded-full"></div>
-                      <span>{highlight}</span>
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-              {/* Category Badge */}
-              <div className="mb-6">
-                <span className="inline-block px-4 py-2 bg-blue-100 text-blue-700 rounded-full text-sm font-semibold">
-                  {selectedTrain.category === 'luxury' && '🌟 หรูหรา'}
-                  {selectedTrain.category === 'cultural' && '🏛️ วัฒนธรรม'}
-                  {selectedTrain.category === 'scenic' && '🏞️ ธรรมชาติ'}
-                  {selectedTrain.category === 'adventure' && '🎒 ผจญภัย'}
-                </span>
-              </div>
-
-              {/* Action Button */}
-              <button
-                className="w-full py-4 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-bold rounded-xl shadow-lg hover:shadow-xl transition-all"
-                onClick={() => {
-                  window.open('https://www.dticket.railway.co.th/', '_blank');
-                }}
-              >
-                จองตั๋วเดินทาง
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
     </section>
   );
 }
