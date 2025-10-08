@@ -287,10 +287,10 @@ export default function Home() {
         <section id="support" className="container mx-auto px-4 mb-16 relative z-10" aria-labelledby="support-heading">
           <div className="max-w-4xl mx-auto backdrop-blur-md bg-gradient-to-r from-blue-50 to-indigo-50 rounded-2xl border border-blue-200/50 p-8 shadow-card text-center">
             <h3 id="support-heading" className="text-2xl md:text-3xl font-bold text-gray-900 mb-3">
-              สนใจแพ็คเกจท่องเที่ยวเพิ่มเติม?
+              ติดต่อสอบถามเพิ่มเติมหรือแจ้งปัญหาการใช้งาน
             </h3>
             <p className="text-gray-700 mb-6 max-w-2xl mx-auto">
-              ดูแพ็คเกจท่องเที่ยวรถไฟพิเศษของเรา หรือติดต่อสอบถามข้อมูลเพิ่มเติม
+              ติดต่อสอบถามเพิ่มเติมหรือแจ้งปัญหาการใช้งาน
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <a
