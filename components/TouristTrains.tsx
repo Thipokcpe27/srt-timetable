@@ -145,6 +145,38 @@ export default function TouristTrains() {
     return () => window.removeEventListener('keydown', handleEscape);
   }, [isModalOpen]);
 
+  // Prevent body scroll when modal is open - keeps modal centered and prevents it from being covered
+  useEffect(() => {
+    if (isModalOpen) {
+      // Save current scroll position
+      const scrollY = window.scrollY;
+      
+      // Prevent scrolling - this keeps the modal fixed in place
+      document.body.style.position = 'fixed';
+      document.body.style.top = `-${scrollY}px`;
+      document.body.style.left = '0';
+      document.body.style.right = '0';
+      document.body.style.width = '100%';
+      document.body.style.overflow = 'hidden';
+      
+      return () => {
+        // Get the scroll position from the body top value
+        const scrollY = Math.abs(parseInt(document.body.style.top || '0'));
+        
+        // Restore scrolling
+        document.body.style.position = '';
+        document.body.style.top = '';
+        document.body.style.left = '';
+        document.body.style.right = '';
+        document.body.style.width = '';
+        document.body.style.overflow = '';
+        
+        // Restore scroll position instantly
+        window.scrollTo(0, scrollY);
+      };
+    }
+  }, [isModalOpen]);
+
   // Auto-slide functionality
   useEffect(() => {
     if (!isAutoPlaying) return;
