@@ -158,13 +158,16 @@ export default function TouristTrains() {
       document.body.style.overflow = 'hidden';
       
       return () => {
+        // Get the current top value before restoring
+        const scrollY = Math.abs(parseInt(document.body.style.top || '0'));
+        
         // Restore scrolling
         document.body.style.position = '';
         document.body.style.top = '';
         document.body.style.width = '';
         document.body.style.overflow = '';
         
-        // Restore scroll position
+        // Restore scroll position without scrolling behavior
         window.scrollTo(0, scrollY);
       };
     }
