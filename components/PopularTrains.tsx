@@ -162,30 +162,18 @@ export default function PopularTrains({ onTrainClick }: PopularTrainsProps) {
 
   return (
     <section 
-      className="backdrop-blur-md bg-white/80 rounded-2xl border border-gray-100/50 p-6 shadow-card"
+      className="backdrop-blur-md bg-white/80 rounded-xl border border-gray-100/50 p-3 shadow-card"
       aria-labelledby="popular-trains-heading"
     >
       {/* Header */}
-      <div className="flex items-center justify-between mb-4">
-        <div className="flex items-center gap-2">
-          <div className="w-8 h-8 bg-gradient-to-br from-orange-500 to-red-500 rounded-lg flex items-center justify-center shadow-md">
-            <TrendingUp className="w-4 h-4 text-white" aria-hidden="true" />
-          </div>
-          <div>
-            <h2 id="popular-trains-heading" className="text-lg font-bold text-gray-900">
-              รถไฟยอดนิยม
-            </h2>
-            <p className="text-xs text-gray-600">เรียงตามความนิยม</p>
-          </div>
-        </div>
+      <div className="flex items-center justify-between mb-2">
+        <h2 id="popular-trains-heading" className="text-sm font-bold text-gray-900 flex items-center gap-1.5">
+          <TrendingUp className="w-3.5 h-3.5 text-orange-500" aria-hidden="true" />
+          รถไฟยอดนิยม
+        </h2>
         
         {/* Live Indicator */}
-        <div className="flex items-center gap-1.5" role="status" aria-live="polite">
-          <div className={`w-1.5 h-1.5 rounded-full ${isAutoPlaying ? 'bg-green-500 animate-pulse' : 'bg-gray-400'}`} aria-hidden="true"></div>
-          <span className="text-[10px] font-semibold text-gray-700">
-            {isAutoPlaying ? 'LIVE' : 'PAUSED'}
-          </span>
-        </div>
+        <div className={`w-1 h-1 rounded-full ${isAutoPlaying ? 'bg-green-500 animate-pulse' : 'bg-gray-400'}`} aria-hidden="true"></div>
       </div>
 
       {/* Carousel Container */}
@@ -193,18 +181,18 @@ export default function PopularTrains({ onTrainClick }: PopularTrainsProps) {
         {/* Navigation Buttons */}
         <button
           onClick={() => { handlePrev(); setIsAutoPlaying(false); }}
-          className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-3 z-10 w-8 h-8 bg-white rounded-full shadow-lg hover:shadow-xl transition-all hover:scale-110 flex items-center justify-center text-gray-700 hover:text-blue-600"
+          className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-2 z-10 w-6 h-6 bg-white rounded-full shadow-md hover:shadow-lg transition-all flex items-center justify-center text-gray-700 hover:text-blue-600"
           aria-label="รถไฟคันก่อนหน้า"
         >
-          <ChevronLeft className="w-4 h-4" aria-hidden="true" />
+          <ChevronLeft className="w-3 h-3" aria-hidden="true" />
         </button>
 
         <button
           onClick={() => { handleNext(); setIsAutoPlaying(false); }}
-          className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-3 z-10 w-8 h-8 bg-white rounded-full shadow-lg hover:shadow-xl transition-all hover:scale-110 flex items-center justify-center text-gray-700 hover:text-blue-600"
+          className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-2 z-10 w-6 h-6 bg-white rounded-full shadow-md hover:shadow-lg transition-all flex items-center justify-center text-gray-700 hover:text-blue-600"
           aria-label="รถไฟคันถัดไป"
         >
-          <ChevronRight className="w-4 h-4" aria-hidden="true" />
+          <ChevronRight className="w-3 h-3" aria-hidden="true" />
         </button>
 
         {/* Cards Container */}
@@ -221,34 +209,22 @@ export default function PopularTrains({ onTrainClick }: PopularTrainsProps) {
               >
                 <button
                   onClick={() => handleTrainClick(train)}
-                  className="w-full backdrop-blur-sm bg-gradient-to-br from-blue-50/60 to-indigo-50/40 hover:from-blue-100/70 hover:to-indigo-100/50 rounded-lg p-3 border border-blue-200/60 hover:border-blue-300/80 transition-all duration-300 hover:shadow-lg group relative overflow-hidden"
+                  className="w-full backdrop-blur-sm bg-gradient-to-br from-blue-50/60 to-indigo-50/40 hover:from-blue-100/70 hover:to-indigo-100/50 rounded-md p-2 border border-blue-200/60 hover:border-blue-300/80 transition-all duration-300 hover:shadow-md group relative overflow-hidden"
                   aria-label={`${train.trainName} ค้นหา ${train.searches} ครั้ง`}
                 >
                   {/* Rank Badge */}
-                  <div className="absolute top-1.5 right-1.5 w-6 h-6 bg-gradient-to-br from-orange-500 to-red-500 rounded-md flex items-center justify-center shadow-md">
-                    <span className="text-[10px] font-bold text-white">#{index + 1}</span>
+                  <div className="absolute top-1 right-1 w-4 h-4 bg-gradient-to-br from-orange-500 to-red-500 rounded flex items-center justify-center">
+                    <span className="text-[8px] font-bold text-white">#{index + 1}</span>
                   </div>
 
                   {/* Train Info */}
-                  <div className="text-left mb-2">
-                    <h3 className="text-xs font-bold text-gray-900 mb-1 line-clamp-2 pr-6">
+                  <div className="text-left">
+                    <h3 className="text-[11px] font-bold text-gray-900 mb-0.5 line-clamp-2 pr-4">
                       {train.trainName}
                     </h3>
-                    <div className="text-[10px] text-gray-600 mb-1.5">
-                      {train.routeFull}
-                    </div>
-                  </div>
-
-                  {/* Search Stats */}
-                  <div className="flex items-center justify-between pt-1.5 border-t border-blue-200/50">
-                    <div className="flex items-center gap-1">
-                      <Users className="w-3 h-3 text-gray-600" aria-hidden="true" />
-                      <span className="text-[10px] font-bold text-gray-900">
-                        {train.searches.toLocaleString()}
-                      </span>
-                    </div>
-                    <div className={`text-sm ${getTrendColor(train.trend)}`} aria-label={`แนวโน้ม ${train.trend === 'up' ? 'เพิ่มขึ้น' : train.trend === 'down' ? 'ลดลง' : 'คงที่'}`}>
-                      {getTrendIcon(train.trend)}
+                    <div className="flex items-center justify-between text-[9px]">
+                      <span className="text-gray-600">{train.routeFull}</span>
+                      <span className="font-bold text-gray-900">{train.searches.toLocaleString()}</span>
                     </div>
                   </div>
                 </button>
@@ -258,15 +234,15 @@ export default function PopularTrains({ onTrainClick }: PopularTrainsProps) {
         </div>
 
         {/* Dots Indicator */}
-        <div className="flex items-center justify-center gap-1.5 mt-3">
+        <div className="flex items-center justify-center gap-1 mt-2">
           {trains.map((_, index) => (
             <button
               key={index}
               onClick={() => handleDotClick(index)}
-              className={`h-1.5 rounded-full transition-all ${
+              className={`h-1 rounded-full transition-all ${
                 index === currentIndex 
-                  ? 'w-6 bg-blue-600' 
-                  : 'w-1.5 bg-gray-300 hover:bg-gray-400'
+                  ? 'w-4 bg-blue-600' 
+                  : 'w-1 bg-gray-300 hover:bg-gray-400'
               }`}
               aria-label={`ไปยังรถไฟคันที่ ${index + 1}`}
               aria-current={index === currentIndex}
