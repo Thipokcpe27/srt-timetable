@@ -277,24 +277,30 @@ export default function Home() {
                 </ol>
               </section>
 
-              {/* Support Section */}
-              <section className="max-w-4xl mx-auto" aria-labelledby="support-heading">
-                <div className="backdrop-blur-md bg-gradient-to-r from-blue-500/10 to-purple-500/10 rounded-xl border border-gray-100/80 p-8 text-center shadow-card hover:shadow-card-hover transition-all duration-300 transform hover:-translate-y-1 min-h-[220px]">
-                  <div className="w-16 h-16 flex-shrink-0 bg-gradient-to-br from-blue-600 to-purple-600 rounded-full flex items-center justify-center mx-auto mb-4 shadow-lg" aria-hidden="true">
-                    <Headphones className="w-8 h-8 text-white drop-shadow-md" />
-                  </div>
-                  <h3 id="support-heading" className="text-2xl font-bold text-gray-900 mb-3 drop-shadow-sm">
-                    ต้องการความช่วยเหลือ?
+              {/* Call to Action - SRT Trips */}
+              <section id="support" className="max-w-4xl mx-auto" aria-labelledby="support-heading">
+                <div className="backdrop-blur-md bg-gradient-to-r from-blue-50 to-indigo-50 rounded-2xl border border-blue-200/50 p-8 shadow-card text-center">
+                  <h3 id="support-heading" className="text-2xl md:text-3xl font-bold text-gray-900 mb-3">
+                    สนใจแพ็คเกจท่องเที่ยวเพิ่มเติม?
                   </h3>
-                  <p className="text-gray-700 mb-5 font-medium">
-                    ทีมงานของเราพร้อมให้บริการตลอด 24 ชั่วโมง
+                  <p className="text-gray-700 mb-6 max-w-2xl mx-auto">
+                    ดูแพ็คเกจท่องเที่ยวรถไฟพิเศษของเรา หรือติดต่อสอบถามข้อมูลเพิ่มเติม
                   </p>
-                  <button
-                    className="px-8 py-3 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white font-bold rounded-lg shadow-md hover:shadow-lg transition-all duration-200"
-                    aria-label="ติดต่อทีมสนับสนุน"
-                  >
-                    ติดต่อเรา
-                  </button>
+                  <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                    <a
+                      href="#srt-trips"
+                      className="flex items-center justify-center gap-2 px-8 py-4 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-bold rounded-xl shadow-lg hover:shadow-xl transition-all"
+                    >
+                      <span>ดู SRT Trips</span>
+                    </a>
+                    <a
+                      href="tel:1690"
+                      className="flex items-center justify-center gap-2 px-8 py-4 bg-white hover:bg-gray-50 text-blue-600 font-bold rounded-xl shadow-md hover:shadow-lg transition-all border-2 border-blue-600"
+                    >
+                      <Phone className="w-5 h-5" aria-hidden="true" />
+                      <span>โทร. 1690</span>
+                    </a>
+                  </div>
                 </div>
               </section>
 

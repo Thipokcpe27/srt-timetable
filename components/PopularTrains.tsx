@@ -154,7 +154,8 @@ export default function PopularTrains({ onTrainClick }: PopularTrainsProps) {
   // Calculate visible cards based on screen size
   const getVisibleCards = () => {
     if (typeof window === 'undefined') return 1;
-    if (window.innerWidth >= 1024) return 3; // Desktop: 3 cards
+    if (window.innerWidth >= 1280) return 4; // Desktop: 4 cards
+    if (window.innerWidth >= 1024) return 3; // Large tablet: 3 cards
     if (window.innerWidth >= 768) return 2;  // Tablet: 2 cards
     return 1; // Mobile: 1 card
   };
@@ -215,56 +216,52 @@ export default function PopularTrains({ onTrainClick }: PopularTrainsProps) {
             {trains.map((train, index) => (
               <div
                 key={train.id}
-                className="flex-shrink-0 w-full md:w-1/2 lg:w-1/3"
+                className="flex-shrink-0 w-full md:w-1/2 lg:w-1/3 xl:w-1/4"
                 style={{ minWidth: `calc(${100 / getVisibleCards()}% - 1rem)` }}
               >
                 <button
                   onClick={() => handleTrainClick(train)}
-                  className="w-full backdrop-blur-sm bg-gradient-to-br from-blue-50/60 to-indigo-50/40 hover:from-blue-100/70 hover:to-indigo-100/50 rounded-xl p-5 border border-blue-200/60 hover:border-blue-300/80 transition-all duration-300 hover:shadow-lg group relative overflow-hidden"
+                  className="w-full backdrop-blur-sm bg-gradient-to-br from-blue-50/60 to-indigo-50/40 hover:from-blue-100/70 hover:to-indigo-100/50 rounded-xl p-4 border border-blue-200/60 hover:border-blue-300/80 transition-all duration-300 hover:shadow-lg group relative overflow-hidden"
                   aria-label={`${train.trainName} ค้นหา ${train.searches} ครั้ง`}
                 >
                   {/* Rank Badge */}
-                  <div className="absolute top-3 right-3 w-8 h-8 bg-gradient-to-br from-orange-500 to-red-500 rounded-lg flex items-center justify-center shadow-md">
+                  <div className="absolute top-2 right-2 w-7 h-7 bg-gradient-to-br from-orange-500 to-red-500 rounded-lg flex items-center justify-center shadow-md">
                     <span className="text-xs font-bold text-white">#{index + 1}</span>
                   </div>
 
                   {/* Train Icon */}
-                  <div className="w-12 h-12 bg-gradient-to-br from-blue-600 to-blue-700 rounded-xl flex items-center justify-center mb-4 shadow-md group-hover:scale-110 transition-transform">
-                    <Train className="w-6 h-6 text-white" aria-hidden="true" />
+                  <div className="w-10 h-10 bg-gradient-to-br from-blue-600 to-blue-700 rounded-lg flex items-center justify-center mb-3 shadow-md group-hover:scale-110 transition-transform">
+                    <Train className="w-5 h-5 text-white" aria-hidden="true" />
                   </div>
 
                   {/* Train Info */}
-                  <div className="text-left mb-4">
+                  <div className="text-left mb-3">
                     <div className="text-xs font-semibold text-blue-600 mb-1">{train.trainNumber}</div>
-                    <h3 className="text-base font-bold text-gray-900 mb-2 line-clamp-1">
+                    <h3 className="text-sm font-bold text-gray-900 mb-1 line-clamp-1">
                       {train.trainName}
                     </h3>
-                    <div className="text-sm text-gray-700 font-medium mb-3">
+                    <div className="text-xs text-gray-700 font-medium mb-2">
                       {train.routeFull}
                     </div>
 
                     {/* Stats */}
-                    <div className="flex items-center gap-3 text-xs">
+                    <div className="flex items-center gap-2 text-xs">
                       <div className="flex items-center gap-1">
                         <Clock className="w-3 h-3 text-gray-600" aria-hidden="true" />
                         <span className="text-gray-600">{train.duration}</span>
-                      </div>
-                      <div className="font-semibold text-blue-700">
-                        {train.priceRange}
                       </div>
                     </div>
                   </div>
 
                   {/* Search Stats */}
-                  <div className="flex items-center justify-between pt-3 border-t border-blue-200/50">
+                  <div className="flex items-center justify-between pt-2 border-t border-blue-200/50">
                     <div className="flex items-center gap-1">
-                      <Users className="w-4 h-4 text-gray-600" aria-hidden="true" />
-                      <span className="text-sm font-bold text-gray-900">
+                      <Users className="w-3 h-3 text-gray-600" aria-hidden="true" />
+                      <span className="text-xs font-bold text-gray-900">
                         {train.searches.toLocaleString()}
                       </span>
-                      <span className="text-xs text-gray-600">ครั้ง</span>
                     </div>
-                    <div className={`text-lg ${getTrendColor(train.trend)}`} aria-label={`แนวโน้ม ${train.trend === 'up' ? 'เพิ่มขึ้น' : train.trend === 'down' ? 'ลดลง' : 'คงที่'}`}>
+                    <div className={`text-base ${getTrendColor(train.trend)}`} aria-label={`แนวโน้ม ${train.trend === 'up' ? 'เพิ่มขึ้น' : train.trend === 'down' ? 'ลดลง' : 'คงที่'}`}>
                       {getTrendIcon(train.trend)}
                     </div>
                   </div>
