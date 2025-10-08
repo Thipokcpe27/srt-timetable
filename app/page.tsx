@@ -277,35 +277,35 @@ export default function Home() {
                 </ol>
               </section>
 
-              {/* Call to Action - SRT Trips */}
-              <section id="support" className="max-w-4xl mx-auto" aria-labelledby="support-heading">
-                <div className="backdrop-blur-md bg-gradient-to-r from-blue-50 to-indigo-50 rounded-2xl border border-blue-200/50 p-8 shadow-card text-center">
-                  <h3 id="support-heading" className="text-2xl md:text-3xl font-bold text-gray-900 mb-3">
-                    สนใจแพ็คเกจท่องเที่ยวเพิ่มเติม?
-                  </h3>
-                  <p className="text-gray-700 mb-6 max-w-2xl mx-auto">
-                    ดูแพ็คเกจท่องเที่ยวรถไฟพิเศษของเรา หรือติดต่อสอบถามข้อมูลเพิ่มเติม
-                  </p>
-                  <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                    <a
-                      href="#srt-trips"
-                      className="flex items-center justify-center gap-2 px-8 py-4 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-bold rounded-xl shadow-lg hover:shadow-xl transition-all"
-                    >
-                      <span>ดู SRT Trips</span>
-                    </a>
-                    <a
-                      href="tel:1690"
-                      className="flex items-center justify-center gap-2 px-8 py-4 bg-white hover:bg-gray-50 text-blue-600 font-bold rounded-xl shadow-md hover:shadow-lg transition-all border-2 border-blue-600"
-                    >
-                      <Phone className="w-5 h-5" aria-hidden="true" />
-                      <span>โทร. 1690</span>
-                    </a>
-                  </div>
-                </div>
-              </section>
-
               {/* SRT Trips - Tourist Trains */}
               <TouristTrains />
+            </div>
+          </div>
+        </section>
+
+        {/* Call to Action - SRT Trips (Before Footer) */}
+        <section id="support" className="container mx-auto px-4 mb-16 relative z-10" aria-labelledby="support-heading">
+          <div className="max-w-4xl mx-auto backdrop-blur-md bg-gradient-to-r from-blue-50 to-indigo-50 rounded-2xl border border-blue-200/50 p-8 shadow-card text-center">
+            <h3 id="support-heading" className="text-2xl md:text-3xl font-bold text-gray-900 mb-3">
+              สนใจแพ็คเกจท่องเที่ยวเพิ่มเติม?
+            </h3>
+            <p className="text-gray-700 mb-6 max-w-2xl mx-auto">
+              ดูแพ็คเกจท่องเที่ยวรถไฟพิเศษของเรา หรือติดต่อสอบถามข้อมูลเพิ่มเติม
+            </p>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <a
+                href="#srt-trips"
+                className="flex items-center justify-center gap-2 px-8 py-4 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-bold rounded-xl shadow-lg hover:shadow-xl transition-all"
+              >
+                <span>ดู SRT Trips</span>
+              </a>
+              <a
+                href="tel:1690"
+                className="flex items-center justify-center gap-2 px-8 py-4 bg-white hover:bg-gray-50 text-blue-600 font-bold rounded-xl shadow-md hover:shadow-lg transition-all border-2 border-blue-600"
+              >
+                <Phone className="w-5 h-5" aria-hidden="true" />
+                <span>โทร. 1690</span>
+              </a>
             </div>
           </div>
         </section>
