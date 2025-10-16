@@ -1,8 +1,8 @@
 'use client';
 
-import { useState, useEffect, useRef } from 'react';
+import { useState } from 'react';
 import { SearchParams, Train } from '@/lib/types';
-import { searchTrains as searchTrainsAPI } from '@/lib/api';
+import { searchTrains } from '@/lib/searchUtils';
 import { searchHistoryService } from '@/lib/searchHistory';
 import TrainSearch from '@/components/TrainSearch';
 import TrainResults from '@/components/TrainResults';
@@ -27,37 +27,28 @@ export default function Home() {
   const [selectedTrains, setSelectedTrains] = useState<Train[]>([]);
   const [showComparison, setShowComparison] = useState(false);
   const [initialSearchValues, setInitialSearchValues] = useState<SearchParams | undefined>();
-  const searchFormRef = useRef<HTMLDivElement>(null);
 
   const handleSearch = async (params: SearchParams) => {
     setIsLoading(true);
     setAnnouncement('กำลังค้นหารถไฟ กรุณารอสักครู่');
     setSelectedTrains([]); // Clear selected trains on new search
 
-    try {
-      // Call real API
-      const results = await searchTrainsAPI(params);
-      setSearchResults(results);
-      setSearchParams(params);
+    // Simulate API call delay (reduced for better performance)
+    await new Promise(resolve => setTimeout(resolve, 100));
 
-      // Save to search history
-      searchHistoryService.addToHistory(params);
+    const results = searchTrains(params);
+    setSearchResults(results);
+    setSearchParams(params);
+    setIsLoading(false);
 
-      // Announce results to screen readers
-      if (results.length === 0) {
-        setAnnouncement('ไม่พบรถไฟที่ตรงกับเงื่อนไขการค้นหา');
-        showToast('info', 'ไม่พบรถไฟที่ตรงกับเงื่อนไข');
-      } else {
-        setAnnouncement(`พบรถไฟ ${results.length} ขบวน จากสถานี ${params.origin} ไปยังสถานี ${params.destination}`);
-        showToast('success', `พบรถไฟ ${results.length} ขบวน`);
-      }
-    } catch (error: any) {
-      console.error('Search error:', error);
-      setSearchResults([]);
-      setAnnouncement('เกิดข้อผิดพลาดในการค้นหา กรุณาลองใหม่อีกครั้ง');
-      showToast('error', 'เกิดข้อผิดพลาดในการค้นหา กรุณาลองใหม่');
-    } finally {
-      setIsLoading(false);
+    // Save to search history
+    searchHistoryService.addToHistory(params);
+
+    // Announce results to screen readers
+    if (results.length === 0) {
+      setAnnouncement('ไม่พบรถไฟที่ตรงกับเงื่อนไขการค้นหา');
+    } else {
+      setAnnouncement(`พบรถไฟ ${results.length} ขบวน จากสถานี ${params.origin} ไปยังสถานี ${params.destination}`);
     }
   };
 
@@ -100,61 +91,6 @@ export default function Home() {
     handleSearch(params);
     showToast('info', `กำลังค้นหา ${origin} → ${destination}`);
   };
-
-  // Keyboard shortcuts
-  useEffect(() => {
-    const handleKeyDown = (event: KeyboardEvent) => {
-      // Skip if user is typing in an input field
-      const target = event.target as HTMLElement;
-      if (target.tagName === 'INPUT' || target.tagName === 'TEXTAREA' || target.tagName === 'SELECT') {
-        // Allow / to focus search even when in input (except when modal is open)
-        if (event.key === '/' && !showComparison) {
-          event.preventDefault();
-          focusSearchForm();
-        }
-        return;
-      }
-
-      // Alt+S: Focus search form
-      if (event.altKey && event.key.toLowerCase() === 's') {
-        event.preventDefault();
-        focusSearchForm();
-        showToast('info', 'กำลังเน้นแบบฟอร์มค้นหา');
-      }
-
-      // Alt+H: Scroll to "How to Use" section
-      if (event.altKey && event.key.toLowerCase() === 'h') {
-        event.preventDefault();
-        const howItWorksSection = document.getElementById('how-it-works');
-        if (howItWorksSection) {
-          howItWorksSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
-          showToast('info', 'ไปยังส่วนวิธีใช้งาน');
-        }
-      }
-
-      // /: Quick focus to search form
-      if (event.key === '/' && !showComparison) {
-        event.preventDefault();
-        focusSearchForm();
-      }
-    };
-
-    const focusSearchForm = () => {
-      if (searchFormRef.current) {
-        // Focus the first input in the search form
-        const firstInput = searchFormRef.current.querySelector('input, select') as HTMLElement;
-        if (firstInput) {
-          firstInput.focus();
-        }
-      }
-    };
-
-    window.addEventListener('keydown', handleKeyDown);
-
-    return () => {
-      window.removeEventListener('keydown', handleKeyDown);
-    };
-  }, [showComparison, showToast]);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50/30 to-slate-100 relative">
@@ -252,9 +188,9 @@ export default function Home() {
           </div>
 
           {/* Search Form */}
-          <div ref={searchFormRef} className="max-w-4xl mx-auto mb-8 md:mb-10 relative z-30">
+          <div className="max-w-4xl mx-auto mb-8 md:mb-10 relative z-30">
             <span className="sr-only">
-              แบบฟอร์มค้นหารถไฟ กรอกข้อมูลสถานีต้นทาง ปลายทาง วันที่ และจำนวนผู้โดยสาร แล้วกดปุ่มค้นหารถไฟ คีย์ลัดที่ใช้ได้: Alt+S หรือ / เพื่อเน้นการค้นหา, Alt+H เพื่อไปยังวิธีใช้งาน
+              แบบฟอร์มค้นหารถไฟ กรอกข้อมูลสถานีต้นทาง ปลายทาง วันที่ และจำนวนผู้โดยสาร แล้วกดปุ่มค้นหารถไฟ
             </span>
             <TrainSearch onSearch={handleSearch} isLoading={isLoading} initialValues={initialSearchValues} />
           </div>

@@ -2,7 +2,6 @@
 
 import { useState, useEffect, useRef } from 'react';
 import { TrendingUp, Train, Clock, Users, ChevronLeft, ChevronRight } from 'lucide-react';
-import { getPopularTrains } from '@/lib/api';
 
 interface PopularTrain {
   id: string;
@@ -81,60 +80,24 @@ interface PopularTrainsProps {
 }
 
 export default function PopularTrains({ onTrainClick }: PopularTrainsProps) {
-  const [trains, setTrains] = useState<PopularTrain[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [trains, setTrains] = useState<PopularTrain[]>(mockPopularTrains);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isAutoPlaying, setIsAutoPlaying] = useState(true);
   const scrollContainerRef = useRef<HTMLDivElement>(null);
 
-  // Load popular trains from API
+  // Simulate real-time search count updates
   useEffect(() => {
-    async function loadPopularTrains() {
-      try {
-        setLoading(true);
-        const data = await getPopularTrains(10);
-        
-        // Transform API data to component format
-        const transformedTrains: PopularTrain[] = data.map((train: any) => ({
-          id: train.trainId,
-          trainNumber: train.trainNumber,
-          trainName: train.trainName,
-          route: `${train.originCode} → ${train.destinationCode}`,
-          routeFull: `${train.originName} - ${train.destinationName}`,
-          searches: train.searchCount || 0,
-          trend: 'stable' as const,
-          duration: train.duration || '-',
-          priceRange: train.minFare && train.maxFare 
-            ? `฿${train.minFare.toLocaleString()}-${train.maxFare.toLocaleString()}`
-            : '฿-',
-        }));
-        
-        setTrains(transformedTrains.length > 0 ? transformedTrains : mockPopularTrains);
-      } catch (error) {
-        console.error('Failed to load popular trains:', error);
-        setTrains(mockPopularTrains);
-      } finally {
-        setLoading(false);
-      }
-    }
-    loadPopularTrains();
-  }, []);
-
-  // Simulate real-time search count updates (only if trains loaded)
-  useEffect(() => {
-    if (trains.length === 0) return;
-    
     const interval = setInterval(() => {
       setTrains(prev => 
         prev.map(train => ({
           ...train,
           searches: train.searches + Math.floor(Math.random() * 3),
-        })).sort((a, b) => b.searches - a.searches)
+        })).sort((a, b) => b.searches - a.searches) // Re-sort by searches
       );
-    }, 8000);
+    }, 8000); // Update every 8 seconds
 
     return () => clearInterval(interval);
-  }, [trains.length]);
+  }, []);
 
   // Auto-slide functionality
   useEffect(() => {
@@ -196,21 +159,6 @@ export default function PopularTrains({ onTrainClick }: PopularTrainsProps) {
     if (window.innerWidth >= 768) return 2;  // Tablet: 2 cards
     return 1; // Mobile: 1 card
   };
-
-  if (loading) {
-    return (
-      <section className="backdrop-blur-md bg-white/80 rounded-2xl border border-gray-100/50 p-6 shadow-card">
-        <div className="text-center py-12">
-          <div className="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-orange-600 border-r-transparent"></div>
-          <p className="mt-2 text-gray-600">กำลังโหลดรถไฟยอดนิยม...</p>
-        </div>
-      </section>
-    );
-  }
-
-  if (trains.length === 0) {
-    return null;
-  }
 
   return (
     <section 
