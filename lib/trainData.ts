@@ -100,6 +100,11 @@ export const trains: Train[] = [
     arrivalTime: '05:30',
     duration: '14ชม. 45นาที',
     stops: ['SRT'],
+    stopSchedules: [
+      { stationId: 'BKK', arrivalTime: null, departureTime: '14:45' },
+      { stationId: 'SRT', arrivalTime: '02:30', departureTime: '02:45' },
+      { stationId: 'HYI', arrivalTime: '05:30', departureTime: null },
+    ],
     classes: [
       {
         id: 'first',
@@ -148,6 +153,11 @@ export const trains: Train[] = [
     arrivalTime: '10:30',
     duration: '4ชม. 30นาที',
     stops: ['AYA'],
+    stopSchedules: [
+      { stationId: 'BKK', arrivalTime: null, departureTime: '06:00' },
+      { stationId: 'AYA', arrivalTime: '07:00', departureTime: '07:10' },
+      { stationId: 'NMA', arrivalTime: '10:30', departureTime: null },
+    ],
     classes: [
       {
         id: 'business',
@@ -186,6 +196,12 @@ export const trains: Train[] = [
     arrivalTime: '07:45',
     duration: '11ชม. 45นาที',
     stops: ['NMA', 'KKN'],
+    stopSchedules: [
+      { stationId: 'BKK', arrivalTime: null, departureTime: '20:00' },
+      { stationId: 'NMA', arrivalTime: '00:15', departureTime: '00:30' },
+      { stationId: 'KKN', arrivalTime: '03:45', departureTime: '04:00' },
+      { stationId: 'UBN', arrivalTime: '07:45', departureTime: null },
+    ],
     classes: [
       {
         id: 'first',
@@ -234,6 +250,12 @@ export const trains: Train[] = [
     arrivalTime: '14:00',
     duration: '6ชม. 30นาที',
     stops: ['AYA', 'NMA'],
+    stopSchedules: [
+      { stationId: 'BKK', arrivalTime: null, departureTime: '07:30' },
+      { stationId: 'AYA', arrivalTime: '08:30', departureTime: '08:40' },
+      { stationId: 'NMA', arrivalTime: '11:00', departureTime: '11:15' },
+      { stationId: 'KKN', arrivalTime: '14:00', departureTime: null },
+    ],
     classes: [
       {
         id: 'business',

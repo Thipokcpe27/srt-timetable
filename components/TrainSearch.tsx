@@ -4,8 +4,8 @@ import { useState, useRef, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { searchSchema, type SearchFormData } from '@/lib/searchUtils';
-import { stations } from '@/lib/trainData';
-import { SearchParams } from '@/lib/types';
+import { fetchStations } from '@/lib/api';
+import { SearchParams, Station } from '@/lib/types';
 import { Search, ArrowLeftRight, ChevronDown } from 'lucide-react';
 
 interface TrainSearchProps {
@@ -15,6 +15,8 @@ interface TrainSearchProps {
 }
 
 export default function TrainSearch({ onSearch, isLoading = false, initialValues }: TrainSearchProps) {
+  const [stations, setStations] = useState<Station[]>([]);
+  const [stationsLoading, setStationsLoading] = useState(true);
   const [swapStations, setSwapStations] = useState(false);
   const [originSearch, setOriginSearch] = useState('');
   const [destinationSearch, setDestinationSearch] = useState('');
@@ -24,6 +26,24 @@ export default function TrainSearch({ onSearch, isLoading = false, initialValues
   const [focusedDestinationIndex, setFocusedDestinationIndex] = useState(-1);
   const originRef = useRef<HTMLDivElement>(null);
   const destinationRef = useRef<HTMLDivElement>(null);
+
+  // Load stations from API
+  useEffect(() => {
+    async function loadStations() {
+      try {
+        setStationsLoading(true);
+        const data = await fetchStations();
+        setStations(data);
+      } catch (error) {
+        console.error('Failed to load stations:', error);
+        // Set empty array on error - could show error message to user
+        setStations([]);
+      } finally {
+        setStationsLoading(false);
+      }
+    }
+    loadStations();
+  }, []);
 
   const {
     register,
