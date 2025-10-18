@@ -1,6 +1,6 @@
 # SRT Timetable System - Complete Checklist ✅
 
-## 🗄️ Database (SQL Server)
+## 🗄️ Database (PostgreSQL - Neon.tech)
 - ✅ **14 Stations** - Bangkok, Chiang Mai, Hat Yai, Nong Khai, etc.
 - ✅ **6 Trains** - Special Express, Express trains
 - ✅ **8 Train Types** - Express Special, Express, Rapid, Commuter, etc.
@@ -101,12 +101,15 @@ npm install
 
 # Set up environment
 cp .env.example .env.local
-# Edit .env.local with your database credentials
+# Edit .env.local with your PostgreSQL connection string from Neon.tech
 
-# Push database schema
+# Generate Prisma Client
+npx prisma generate
+
+# Push database schema to PostgreSQL
 npx prisma db push
 
-# Seed database
+# Seed database with sample data
 npx prisma db seed
 
 # Run development server
@@ -118,6 +121,8 @@ npm run build
 # Start production server
 npm start
 ```
+
+**See**: [POSTGRESQL_SETUP_GUIDE.md](./POSTGRESQL_SETUP_GUIDE.md) for complete setup instructions
 
 ## 📊 Current Data
 - **Stations**: 14 active stations
@@ -151,13 +156,17 @@ npm start
 - ✅ `API_ENDPOINTS_DOCUMENTATION.md` - Complete API reference
 - ✅ `ADMIN_PANEL_FEATURES.md` - Admin panel guide
 - ✅ `PRICING_ENGINE_ARCHITECTURE.md` - Pricing system docs
-- ✅ `DATABASE_SCHEMA_COMPLETE.sql` - Full schema
-- ✅ `README_SQLSERVER.md` - Database setup guide
+- ✅ `POSTGRESQL_SETUP_GUIDE.md` - **PostgreSQL migration & setup guide**
+- ✅ `VERCEL_DEPLOYMENT.md` - Vercel deployment guide
+- ✅ `DATABASE_SCHEMA_COMPLETE.sql` - Full schema reference
 
 ---
 
 **Status**: ✅ **PRODUCTION READY**
+**Database**: ✅ **PostgreSQL (Neon.tech)**
 **Build**: ✅ **SUCCESSFUL (19/19 pages)**
 **Tests**: ✅ **ALL PASSING**
+**Deployment**: ✅ **Vercel Compatible**
 
 🎉 **ระบบพร้อมใช้งานเต็มรูปแบบแล้ว!**
+🚀 **พร้อม Deploy บน Vercel แล้ว!**

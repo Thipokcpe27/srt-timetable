@@ -1,6 +1,6 @@
 // ============================================
 // Prisma Schema for SRT Timetable
-// Database: Microsoft SQL Server
+// Database: PostgreSQL (Neon.tech)
 // Complete Schema: 22 Tables
 // ============================================
 
@@ -9,7 +9,7 @@ generator client {
 }
 
 datasource db {
-  provider = "sqlserver"
+  provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
@@ -18,251 +18,251 @@ datasource db {
 // ============================================
 
 model Station {
-  id                    Int       @id @default(autoincrement())
-  stationCode          Int       @unique @map("station_code")
-  
-  codeTh               String    @map("code_th") @db.NVarChar(10)
-  codeEn               String    @map("code_en") @db.NVarChar(10)
-  codeCn               String?   @map("code_cn") @db.NVarChar(10)
-  
-  nameTh               String    @map("name_th") @db.NVarChar(255)
-  nameEn               String    @map("name_en") @db.NVarChar(255)
-  nameCn               String?   @map("name_cn") @db.NVarChar(255)
-  
-  displayNameTh        String?   @map("display_name_th") @db.NVarChar(255)
-  displayNameEn        String?   @map("display_name_en") @db.NVarChar(255)
-  displayNameCn        String?   @map("display_name_cn") @db.NVarChar(255)
-  
-  distanceForPricing   Decimal   @default(0) @map("distance_for_pricing") @db.Decimal(10, 4)
-  distanceActual       Decimal   @default(0) @map("distance_actual") @db.Decimal(10, 4)
-  
-  stationClass         String?   @map("station_class") @db.NVarChar(20)
-  
-  latitude             Decimal?  @db.Decimal(10, 8)
-  longitude            Decimal?  @db.Decimal(11, 8)
-  address              String?   @db.NVarChar(Max)
-  phone                String?   @db.NVarChar(20)
-  
-  facilities           String?   @db.NVarChar(Max)
-  
-  imageUrl             String?   @map("image_url") @db.NVarChar(500)
-  images               String?   @db.NVarChar(Max)
-  
-  isActive             Boolean   @default(true) @map("is_active")
-  notes                String?   @db.NVarChar(Max)
-  
-  createdAt            DateTime  @default(now()) @map("created_at") @db.DateTime2
-  updatedAt            DateTime  @default(now()) @updatedAt @map("updated_at") @db.DateTime2
-  createdBy            String?   @map("created_by") @db.UniqueIdentifier
-  updatedBy            String?   @map("updated_by") @db.UniqueIdentifier
-  
-  trainsOrigin         Train[]   @relation("OriginStation")
-  trainsDestination    Train[]   @relation("DestinationStation")
-  trainStops           TrainStop[]
-  routeDistancesFrom   RouteDistance[] @relation("FromStation")
-  routeDistancesTo     RouteDistance[] @relation("ToStation")
-  
-  @@map("stations")
+  id          Int @id @default(autoincrement())
+  stationCode Int @unique @map("station_code")
+
+  codeTh String  @map("code_th")
+  codeEn String  @map("code_en")
+  codeCn String? @map("code_cn")
+
+  nameTh String  @map("name_th")
+  nameEn String  @map("name_en")
+  nameCn String? @map("name_cn")
+
+  displayNameTh String? @map("display_name_th")
+  displayNameEn String? @map("display_name_en")
+  displayNameCn String? @map("display_name_cn")
+
+  distanceForPricing Decimal @default(0) @map("distance_for_pricing") @db.Decimal(10, 4)
+  distanceActual     Decimal @default(0) @map("distance_actual") @db.Decimal(10, 4)
+
+  stationClass String? @map("station_class")
+
+  latitude  Decimal? @db.Decimal(10, 8)
+  longitude Decimal? @db.Decimal(11, 8)
+  address   String?
+  phone     String?
+
+  facilities String?
+
+  imageUrl String? @map("image_url")
+  images   String?
+
+  isActive Boolean @default(true) @map("is_active")
+  notes    String?
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @default(now()) @updatedAt @map("updated_at")
+  createdBy String?  @map("created_by")
+  updatedBy String?  @map("updated_by")
+
+  trainsOrigin       Train[]         @relation("OriginStation")
+  trainsDestination  Train[]         @relation("DestinationStation")
+  trainStops         TrainStop[]
+  routeDistancesFrom RouteDistance[] @relation("FromStation")
+  routeDistancesTo   RouteDistance[] @relation("ToStation")
+
   @@index([codeTh])
   @@index([codeEn])
   @@index([stationCode])
   @@index([stationClass])
   @@index([isActive])
+  @@map("stations")
 }
 
 model TrainType {
-  id           Int       @id @default(autoincrement())
-  code         String    @unique @db.NVarChar(50)
-  
-  nameTh       String    @map("name_th") @db.NVarChar(100)
-  nameEn       String?   @map("name_en") @db.NVarChar(100)
-  nameCn       String?   @map("name_cn") @db.NVarChar(100)
-  
-  baseFare     Decimal   @default(0) @map("base_fare") @db.Decimal(10, 2)
-  
-  sortOrder    Int       @default(0) @map("sort_order")
-  color        String?   @db.NVarChar(7)
-  
-  isActive     Boolean   @default(true) @map("is_active")
-  
-  createdAt    DateTime  @default(now()) @map("created_at") @db.DateTime2
-  updatedAt    DateTime  @default(now()) @updatedAt @map("updated_at") @db.DateTime2
-  
-  trains       Train[]
-  trainFares   TrainFare[]
-  
-  @@map("train_types")
+  id   Int    @id @default(autoincrement())
+  code String @unique
+
+  nameTh String  @map("name_th")
+  nameEn String? @map("name_en")
+  nameCn String? @map("name_cn")
+
+  baseFare Decimal @default(0) @map("base_fare") @db.Decimal(10, 2)
+
+  sortOrder Int     @default(0) @map("sort_order")
+  color     String?
+
+  isActive Boolean @default(true) @map("is_active")
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @default(now()) @updatedAt @map("updated_at")
+
+  trains     Train[]
+  trainFares TrainFare[]
+
   @@index([code])
   @@index([sortOrder])
+  @@map("train_types")
 }
 
 model Train {
-  id                    Int       @id @default(autoincrement())
-  trainNumber          String    @unique @map("train_number") @db.NVarChar(20)
-  
-  trainNameTh          String?   @map("train_name_th") @db.NVarChar(255)
-  trainNameEn          String?   @map("train_name_en") @db.NVarChar(255)
-  trainNameCn          String?   @map("train_name_cn") @db.NVarChar(255)
-  
-  trainTypeId          Int?      @map("train_type_id")
-  trainType            TrainType? @relation(fields: [trainTypeId], references: [id])
-  
-  originStationId      Int?      @map("origin_station_id")
-  originStation        Station?  @relation("OriginStation", fields: [originStationId], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  
-  destinationStationId Int?      @map("destination_station_id")
-  destinationStation   Station?  @relation("DestinationStation", fields: [destinationStationId], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  
-  departureTime        DateTime  @map("departure_time") @db.Time
-  arrivalTime          DateTime  @map("arrival_time") @db.Time
-  
-  durationMinutes      Int?      @map("duration_minutes")
-  operatingDays        String    @default("daily") @map("operating_days") @db.NVarChar(200)
-  
-  runningOrder         Int?      @map("running_order")
-  serviceZone          String?   @map("service_zone") @db.NVarChar(100)
-  totalDistanceKm      Decimal?  @map("total_distance_km") @db.Decimal(10, 2)
-  
-  isActive             Boolean   @default(true) @map("is_active")
-  notes                String?   @db.NVarChar(Max)
-  
-  createdAt            DateTime  @default(now()) @map("created_at") @db.DateTime2
-  updatedAt            DateTime  @default(now()) @updatedAt @map("updated_at") @db.DateTime2
-  createdBy            String?   @map("created_by") @db.UniqueIdentifier
-  updatedBy            String?   @map("updated_by") @db.UniqueIdentifier
-  
-  trainStops           TrainStop[]
-  trainCompositions    TrainComposition[]
-  routeDistances       RouteDistance[]
-  announcements        Announcement[]
-  
-  @@map("trains")
+  id          Int    @id @default(autoincrement())
+  trainNumber String @unique @map("train_number")
+
+  trainNameTh String? @map("train_name_th")
+  trainNameEn String? @map("train_name_en")
+  trainNameCn String? @map("train_name_cn")
+
+  trainTypeId Int?       @map("train_type_id")
+  trainType   TrainType? @relation(fields: [trainTypeId], references: [id])
+
+  originStationId Int?     @map("origin_station_id")
+  originStation   Station? @relation("OriginStation", fields: [originStationId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+
+  destinationStationId Int?     @map("destination_station_id")
+  destinationStation   Station? @relation("DestinationStation", fields: [destinationStationId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+
+  departureTime DateTime @map("departure_time") @db.Time
+  arrivalTime   DateTime @map("arrival_time") @db.Time
+
+  durationMinutes Int?   @map("duration_minutes")
+  operatingDays   String @default("daily") @map("operating_days")
+
+  runningOrder    Int?     @map("running_order")
+  serviceZone     String?  @map("service_zone")
+  totalDistanceKm Decimal? @map("total_distance_km") @db.Decimal(10, 2)
+
+  isActive Boolean @default(true) @map("is_active")
+  notes    String?
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @default(now()) @updatedAt @map("updated_at")
+  createdBy String?  @map("created_by")
+  updatedBy String?  @map("updated_by")
+
+  trainStops        TrainStop[]
+  trainCompositions TrainComposition[]
+  routeDistances    RouteDistance[]
+  announcements     Announcement[]
+
   @@index([trainNumber])
   @@index([trainTypeId])
   @@index([originStationId])
   @@index([destinationStationId])
   @@index([isActive])
+  @@map("trains")
 }
 
 model TrainStop {
-  id                Int       @id @default(autoincrement())
-  trainId           Int       @map("train_id")
-  train             Train     @relation(fields: [trainId], references: [id], onDelete: Cascade)
-  
-  stationId         Int       @map("station_id")
-  station           Station   @relation(fields: [stationId], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  
-  stopOrder         Int       @map("stop_order")
-  
-  arrivalTime       DateTime? @map("arrival_time") @db.Time
-  departureTime     DateTime? @map("departure_time") @db.Time
-  waitTimeMinutes   Int?      @map("wait_time_minutes")
-  
-  platformNumber    String?   @map("platform_number") @db.NVarChar(20)
-  
+  id      Int   @id @default(autoincrement())
+  trainId Int   @map("train_id")
+  train   Train @relation(fields: [trainId], references: [id], onDelete: Cascade)
+
+  stationId Int     @map("station_id")
+  station   Station @relation(fields: [stationId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+
+  stopOrder Int @map("stop_order")
+
+  arrivalTime     DateTime? @map("arrival_time") @db.Time
+  departureTime   DateTime? @map("departure_time") @db.Time
+  waitTimeMinutes Int?      @map("wait_time_minutes")
+
+  platformNumber String? @map("platform_number")
+
   distanceFromOrigin Decimal? @map("distance_from_origin") @db.Decimal(10, 2)
-  
-  isActive          Boolean   @default(true) @map("is_active")
-  notes             String?   @db.NVarChar(Max)
-  
-  createdAt         DateTime  @default(now()) @map("created_at") @db.DateTime2
-  updatedAt         DateTime  @default(now()) @updatedAt @map("updated_at") @db.DateTime2
-  
-  @@map("train_stops")
+
+  isActive Boolean @default(true) @map("is_active")
+  notes    String?
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @default(now()) @updatedAt @map("updated_at")
+
   @@unique([trainId, stationId])
   @@index([trainId])
   @@index([stationId])
   @@index([stopOrder])
+  @@map("train_stops")
 }
 
 model RouteDistance {
-  id                Int       @id @default(autoincrement())
-  trainId           Int?      @map("train_id")
-  train             Train?    @relation(fields: [trainId], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  
-  fromStationId     Int       @map("from_station_id")
-  fromStation       Station   @relation("FromStation", fields: [fromStationId], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  
-  toStationId       Int       @map("to_station_id")
-  toStation         Station   @relation("ToStation", fields: [toStationId], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  
-  distanceKm        Decimal   @map("distance_km") @db.Decimal(10, 2)
-  distanceForPricing Decimal  @map("distance_for_pricing") @db.Decimal(10, 2)
-  
-  notes             String?   @db.NVarChar(Max)
-  
-  createdAt         DateTime  @default(now()) @map("created_at") @db.DateTime2
-  updatedAt         DateTime  @default(now()) @updatedAt @map("updated_at") @db.DateTime2
-  
-  @@map("route_distances")
+  id      Int    @id @default(autoincrement())
+  trainId Int?   @map("train_id")
+  train   Train? @relation(fields: [trainId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+
+  fromStationId Int     @map("from_station_id")
+  fromStation   Station @relation("FromStation", fields: [fromStationId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+
+  toStationId Int     @map("to_station_id")
+  toStation   Station @relation("ToStation", fields: [toStationId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+
+  distanceKm         Decimal @map("distance_km") @db.Decimal(10, 2)
+  distanceForPricing Decimal @map("distance_for_pricing") @db.Decimal(10, 2)
+
+  notes String?
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @default(now()) @updatedAt @map("updated_at")
+
   @@unique([trainId, fromStationId, toStationId])
   @@index([trainId])
   @@index([fromStationId])
   @@index([toStationId])
+  @@map("route_distances")
 }
 
 model Bogie {
-  id                Int       @id @default(autoincrement())
-  code              String    @unique @db.NVarChar(50)
-  
-  nameTh            String    @map("name_th") @db.NVarChar(100)
-  nameEn            String?   @map("name_en") @db.NVarChar(100)
-  nameCn            String?   @map("name_cn") @db.NVarChar(100)
-  
-  shortNameTh       String?   @map("short_name_th") @db.NVarChar(50)
-  shortNameEn       String?   @map("short_name_en") @db.NVarChar(50)
-  
-  classNumber       Int       @map("class_number")
-  bogieClass        String    @map("bogie_class") @db.NVarChar(50)
-  
-  hasAC             Boolean   @default(false) @map("has_ac")
-  isSleeper         Boolean   @default(false) @map("is_sleeper")
-  
-  totalSeats        Int?      @map("total_seats")
-  upperBerths       Int?      @map("upper_berths")
-  lowerBerths       Int?      @map("lower_berths")
-  
-  sortOrder         Int       @default(0) @map("sort_order")
-  
-  isActive          Boolean   @default(true) @map("is_active")
-  notes             String?   @db.NVarChar(Max)
-  
-  createdAt         DateTime  @default(now()) @map("created_at") @db.DateTime2
-  updatedAt         DateTime  @default(now()) @updatedAt @map("updated_at") @db.DateTime2
-  
+  id   Int    @id @default(autoincrement())
+  code String @unique
+
+  nameTh String  @map("name_th")
+  nameEn String? @map("name_en")
+  nameCn String? @map("name_cn")
+
+  shortNameTh String? @map("short_name_th")
+  shortNameEn String? @map("short_name_en")
+
+  classNumber Int    @map("class_number")
+  bogieClass  String @map("bogie_class")
+
+  hasAC     Boolean @default(false) @map("has_ac")
+  isSleeper Boolean @default(false) @map("is_sleeper")
+
+  totalSeats  Int? @map("total_seats")
+  upperBerths Int? @map("upper_berths")
+  lowerBerths Int? @map("lower_berths")
+
+  sortOrder Int @default(0) @map("sort_order")
+
+  isActive Boolean @default(true) @map("is_active")
+  notes    String?
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @default(now()) @updatedAt @map("updated_at")
+
   trainCompositions TrainComposition[]
   bogieACFares      BogieACFare[]
   bogieAmenities    BogieAmenity[]
   berthFares        BerthFare[]
-  
-  @@map("bogies")
+
   @@index([code])
   @@index([classNumber])
   @@index([sortOrder])
+  @@map("bogies")
 }
 
 model TrainComposition {
-  id                Int       @id @default(autoincrement())
-  trainId           Int       @map("train_id")
-  train             Train     @relation(fields: [trainId], references: [id], onDelete: Cascade)
-  
-  bogieId           Int       @map("bogie_id")
-  bogie             Bogie     @relation(fields: [bogieId], references: [id])
-  
-  quantity          Int       @default(1)
-  
-  sortOrder         Int?      @map("sort_order")
-  
-  isActive          Boolean   @default(true) @map("is_active")
-  notes             String?   @db.NVarChar(Max)
-  
-  createdAt         DateTime  @default(now()) @map("created_at") @db.DateTime2
-  updatedAt         DateTime  @default(now()) @updatedAt @map("updated_at") @db.DateTime2
-  
-  @@map("train_compositions")
+  id      Int   @id @default(autoincrement())
+  trainId Int   @map("train_id")
+  train   Train @relation(fields: [trainId], references: [id], onDelete: Cascade)
+
+  bogieId Int   @map("bogie_id")
+  bogie   Bogie @relation(fields: [bogieId], references: [id])
+
+  quantity Int @default(1)
+
+  sortOrder Int? @map("sort_order")
+
+  isActive Boolean @default(true) @map("is_active")
+  notes    String?
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @default(now()) @updatedAt @map("updated_at")
+
   @@unique([trainId, bogieId])
   @@index([trainId])
   @@index([bogieId])
+  @@map("train_compositions")
 }
 
 // ============================================
@@ -270,195 +270,195 @@ model TrainComposition {
 // ============================================
 
 model TrainFare {
-  id                Int       @id @default(autoincrement())
-  trainTypeId       Int       @map("train_type_id")
-  trainType         TrainType @relation(fields: [trainTypeId], references: [id])
-  
-  classNumber       Int       @map("class_number")
-  
-  fareTh            String    @map("fare_th") @db.NVarChar(100)
-  fareEn            String?   @map("fare_en") @db.NVarChar(100)
-  
-  fareValue         Decimal   @map("fare_value") @db.Decimal(10, 2)
-  
-  isActive          Boolean   @default(true) @map("is_active")
-  notes             String?   @db.NVarChar(Max)
-  
-  createdAt         DateTime  @default(now()) @map("created_at") @db.DateTime2
-  updatedAt         DateTime  @default(now()) @updatedAt @map("updated_at") @db.DateTime2
-  
-  @@map("train_fares")
+  id          Int       @id @default(autoincrement())
+  trainTypeId Int       @map("train_type_id")
+  trainType   TrainType @relation(fields: [trainTypeId], references: [id])
+
+  classNumber Int @map("class_number")
+
+  fareTh String  @map("fare_th")
+  fareEn String? @map("fare_en")
+
+  fareValue Decimal @map("fare_value") @db.Decimal(10, 2)
+
+  isActive Boolean @default(true) @map("is_active")
+  notes    String?
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @default(now()) @updatedAt @map("updated_at")
+
   @@unique([trainTypeId, classNumber])
   @@index([trainTypeId])
   @@index([classNumber])
+  @@map("train_fares")
 }
 
 model DistanceFare {
-  id                Int       @id @default(autoincrement())
-  code              String    @unique @db.NVarChar(50)
-  
-  nameTh            String    @map("name_th") @db.NVarChar(100)
-  nameEn            String?   @map("name_en") @db.NVarChar(100)
-  
-  classNumber       Int       @map("class_number")
-  
-  sortOrder         Int       @default(0) @map("sort_order")
-  
-  isActive          Boolean   @default(true) @map("is_active")
-  
-  createdAt         DateTime  @default(now()) @map("created_at") @db.DateTime2
-  updatedAt         DateTime  @default(now()) @updatedAt @map("updated_at") @db.DateTime2
-  
+  id   Int    @id @default(autoincrement())
+  code String @unique
+
+  nameTh String  @map("name_th")
+  nameEn String? @map("name_en")
+
+  classNumber Int @map("class_number")
+
+  sortOrder Int @default(0) @map("sort_order")
+
+  isActive Boolean @default(true) @map("is_active")
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @default(now()) @updatedAt @map("updated_at")
+
   distanceFareRanges DistanceFareRange[]
-  
-  @@map("distance_fares")
+
   @@index([code])
   @@index([classNumber])
+  @@map("distance_fares")
 }
 
 model DistanceFareRange {
-  id                Int       @id @default(autoincrement())
-  distanceFareId    Int       @map("distance_fare_id")
-  distanceFare      DistanceFare @relation(fields: [distanceFareId], references: [id], onDelete: Cascade)
-  
-  minKm             Decimal   @map("min_km") @db.Decimal(10, 2)
-  maxKm             Decimal?  @map("max_km") @db.Decimal(10, 2)
-  
-  farePerKm         Decimal?  @map("fare_per_km") @db.Decimal(10, 4)
-  flatRate          Decimal?  @map("flat_rate") @db.Decimal(10, 2)
-  
-  createdAt         DateTime  @default(now()) @map("created_at") @db.DateTime2
-  updatedAt         DateTime  @default(now()) @updatedAt @map("updated_at") @db.DateTime2
-  
-  @@map("distance_fare_ranges")
+  id             Int          @id @default(autoincrement())
+  distanceFareId Int          @map("distance_fare_id")
+  distanceFare   DistanceFare @relation(fields: [distanceFareId], references: [id], onDelete: Cascade)
+
+  minKm Decimal  @map("min_km") @db.Decimal(10, 2)
+  maxKm Decimal? @map("max_km") @db.Decimal(10, 2)
+
+  farePerKm Decimal? @map("fare_per_km") @db.Decimal(10, 4)
+  flatRate  Decimal? @map("flat_rate") @db.Decimal(10, 2)
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @default(now()) @updatedAt @map("updated_at")
+
   @@index([distanceFareId])
   @@index([minKm])
+  @@map("distance_fare_ranges")
 }
 
 model FareFormula {
-  id                Int       @id @default(autoincrement())
-  formulaName       String    @map("formula_name") @db.NVarChar(100)
-  
-  description       String?   @db.NVarChar(Max)
-  
-  formula           String    @db.NVarChar(Max)
-  
-  isActive          Boolean   @default(true) @map("is_active")
-  
-  createdAt         DateTime  @default(now()) @map("created_at") @db.DateTime2
-  updatedAt         DateTime  @default(now()) @updatedAt @map("updated_at") @db.DateTime2
-  
+  id          Int    @id @default(autoincrement())
+  formulaName String @map("formula_name")
+
+  description String?
+
+  formula String
+
+  isActive Boolean @default(true) @map("is_active")
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @default(now()) @updatedAt @map("updated_at")
+
   @@map("fare_formulas")
 }
 
 model ACFareCategory {
-  id                Int       @id @default(autoincrement())
-  code              String    @unique @db.NVarChar(50)
-  
-  nameTh            String    @map("name_th") @db.NVarChar(100)
-  nameEn            String?   @map("name_en") @db.NVarChar(100)
-  
-  sortOrder         Int       @default(0) @map("sort_order")
-  
-  isActive          Boolean   @default(true) @map("is_active")
-  
-  createdAt         DateTime  @default(now()) @map("created_at") @db.DateTime2
-  updatedAt         DateTime  @default(now()) @updatedAt @map("updated_at") @db.DateTime2
-  
-  acFares           ACFare[]
-  
-  @@map("ac_fare_categories")
+  id   Int    @id @default(autoincrement())
+  code String @unique
+
+  nameTh String  @map("name_th")
+  nameEn String? @map("name_en")
+
+  sortOrder Int @default(0) @map("sort_order")
+
+  isActive Boolean @default(true) @map("is_active")
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @default(now()) @updatedAt @map("updated_at")
+
+  acFares ACFare[]
+
   @@index([code])
+  @@map("ac_fare_categories")
 }
 
 model ACFare {
-  id                Int       @id @default(autoincrement())
-  acFareCategoryId  Int       @map("ac_fare_category_id")
-  acFareCategory    ACFareCategory @relation(fields: [acFareCategoryId], references: [id])
-  
-  minKm             Decimal   @map("min_km") @db.Decimal(10, 2)
-  maxKm             Decimal?  @map("max_km") @db.Decimal(10, 2)
-  
-  fareAmount        Decimal   @map("fare_amount") @db.Decimal(10, 2)
-  
-  createdAt         DateTime  @default(now()) @map("created_at") @db.DateTime2
-  updatedAt         DateTime  @default(now()) @updatedAt @map("updated_at") @db.DateTime2
-  
-  @@map("ac_fares")
+  id               Int            @id @default(autoincrement())
+  acFareCategoryId Int            @map("ac_fare_category_id")
+  acFareCategory   ACFareCategory @relation(fields: [acFareCategoryId], references: [id])
+
+  minKm Decimal  @map("min_km") @db.Decimal(10, 2)
+  maxKm Decimal? @map("max_km") @db.Decimal(10, 2)
+
+  fareAmount Decimal @map("fare_amount") @db.Decimal(10, 2)
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @default(now()) @updatedAt @map("updated_at")
+
   @@index([acFareCategoryId])
   @@index([minKm])
+  @@map("ac_fares")
 }
 
 model BogieACFare {
-  id                Int       @id @default(autoincrement())
-  bogieId           Int       @map("bogie_id")
-  bogie             Bogie     @relation(fields: [bogieId], references: [id])
-  
-  minKm             Decimal   @map("min_km") @db.Decimal(10, 2)
-  maxKm             Decimal?  @map("max_km") @db.Decimal(10, 2)
-  
-  acFare            Decimal   @map("ac_fare") @db.Decimal(10, 2)
-  
-  notes             String?   @db.NVarChar(Max)
-  
-  createdAt         DateTime  @default(now()) @map("created_at") @db.DateTime2
-  updatedAt         DateTime  @default(now()) @updatedAt @map("updated_at") @db.DateTime2
-  
-  @@map("bogie_ac_fares")
+  id      Int   @id @default(autoincrement())
+  bogieId Int   @map("bogie_id")
+  bogie   Bogie @relation(fields: [bogieId], references: [id])
+
+  minKm Decimal  @map("min_km") @db.Decimal(10, 2)
+  maxKm Decimal? @map("max_km") @db.Decimal(10, 2)
+
+  acFare Decimal @map("ac_fare") @db.Decimal(10, 2)
+
+  notes String?
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @default(now()) @updatedAt @map("updated_at")
+
   @@index([bogieId])
   @@index([minKm])
+  @@map("bogie_ac_fares")
 }
 
 model BerthFare {
-  id                Int       @id @default(autoincrement())
-  bogieId           Int       @map("bogie_id")
-  bogie             Bogie     @relation(fields: [bogieId], references: [id])
-  
-  berthType         String    @map("berth_type") @db.NVarChar(50)
-  
-  minKm             Decimal   @map("min_km") @db.Decimal(10, 2)
-  maxKm             Decimal?  @map("max_km") @db.Decimal(10, 2)
-  
-  fareAmount        Decimal   @map("fare_amount") @db.Decimal(10, 2)
-  
-  notes             String?   @db.NVarChar(Max)
-  
-  createdAt         DateTime  @default(now()) @map("created_at") @db.DateTime2
-  updatedAt         DateTime  @default(now()) @updatedAt @map("updated_at") @db.DateTime2
-  
-  @@map("berth_fares")
+  id      Int   @id @default(autoincrement())
+  bogieId Int   @map("bogie_id")
+  bogie   Bogie @relation(fields: [bogieId], references: [id])
+
+  berthType String @map("berth_type")
+
+  minKm Decimal  @map("min_km") @db.Decimal(10, 2)
+  maxKm Decimal? @map("max_km") @db.Decimal(10, 2)
+
+  fareAmount Decimal @map("fare_amount") @db.Decimal(10, 2)
+
+  notes String?
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @default(now()) @updatedAt @map("updated_at")
+
   @@index([bogieId])
   @@index([berthType])
   @@index([minKm])
+  @@map("berth_fares")
 }
 
 model PriceAdjustment {
-  id                Int       @id @default(autoincrement())
-  code              String    @unique @db.NVarChar(50)
-  
-  nameTh            String    @map("name_th") @db.NVarChar(100)
-  nameEn            String?   @map("name_en") @db.NVarChar(100)
-  
-  adjustmentType    String    @map("adjustment_type") @db.NVarChar(50)
-  
-  value             Decimal   @db.Decimal(10, 2)
-  
-  startDate         DateTime? @map("start_date") @db.Date
-  endDate           DateTime? @map("end_date") @db.Date
-  
-  applicableTrains  String?   @map("applicable_trains") @db.NVarChar(Max)
-  applicableBogies  String?   @map("applicable_bogies") @db.NVarChar(Max)
-  
-  isActive          Boolean   @default(true) @map("is_active")
-  notes             String?   @db.NVarChar(Max)
-  
-  createdAt         DateTime  @default(now()) @map("created_at") @db.DateTime2
-  updatedAt         DateTime  @default(now()) @updatedAt @map("updated_at") @db.DateTime2
-  
-  @@map("price_adjustments")
+  id   Int    @id @default(autoincrement())
+  code String @unique
+
+  nameTh String  @map("name_th")
+  nameEn String? @map("name_en")
+
+  adjustmentType String @map("adjustment_type")
+
+  value Decimal @db.Decimal(10, 2)
+
+  startDate DateTime? @map("start_date")
+  endDate   DateTime? @map("end_date")
+
+  applicableTrains String? @map("applicable_trains")
+  applicableBogies String? @map("applicable_bogies")
+
+  isActive Boolean @default(true) @map("is_active")
+  notes    String?
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @default(now()) @updatedAt @map("updated_at")
+
   @@index([code])
   @@index([adjustmentType])
   @@index([isActive])
+  @@map("price_adjustments")
 }
 
 // ============================================
@@ -466,77 +466,77 @@ model PriceAdjustment {
 // ============================================
 
 model Amenity {
-  id                Int       @id @default(autoincrement())
-  code              String    @unique @db.NVarChar(50)
-  
-  nameTh            String    @map("name_th") @db.NVarChar(100)
-  nameEn            String?   @map("name_en") @db.NVarChar(100)
-  nameCn            String?   @map("name_cn") @db.NVarChar(100)
-  
-  icon              String?   @db.NVarChar(50)
-  
-  sortOrder         Int       @default(0) @map("sort_order")
-  
-  isActive          Boolean   @default(true) @map("is_active")
-  
-  createdAt         DateTime  @default(now()) @map("created_at") @db.DateTime2
-  updatedAt         DateTime  @default(now()) @updatedAt @map("updated_at") @db.DateTime2
-  
-  bogieAmenities    BogieAmenity[]
-  
-  @@map("amenities")
+  id   Int    @id @default(autoincrement())
+  code String @unique
+
+  nameTh String  @map("name_th")
+  nameEn String? @map("name_en")
+  nameCn String? @map("name_cn")
+
+  icon String?
+
+  sortOrder Int @default(0) @map("sort_order")
+
+  isActive Boolean @default(true) @map("is_active")
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @default(now()) @updatedAt @map("updated_at")
+
+  bogieAmenities BogieAmenity[]
+
   @@index([code])
+  @@map("amenities")
 }
 
 model BogieAmenity {
-  id                Int       @id @default(autoincrement())
-  bogieId           Int       @map("bogie_id")
-  bogie             Bogie     @relation(fields: [bogieId], references: [id], onDelete: Cascade)
-  
-  amenityId         Int       @map("amenity_id")
-  amenity           Amenity   @relation(fields: [amenityId], references: [id])
-  
-  createdAt         DateTime  @default(now()) @map("created_at") @db.DateTime2
-  
-  @@map("bogie_amenities")
+  id      Int   @id @default(autoincrement())
+  bogieId Int   @map("bogie_id")
+  bogie   Bogie @relation(fields: [bogieId], references: [id], onDelete: Cascade)
+
+  amenityId Int     @map("amenity_id")
+  amenity   Amenity @relation(fields: [amenityId], references: [id])
+
+  createdAt DateTime @default(now()) @map("created_at")
+
   @@unique([bogieId, amenityId])
   @@index([bogieId])
   @@index([amenityId])
+  @@map("bogie_amenities")
 }
 
 model Announcement {
-  id                Int       @id @default(autoincrement())
-  
-  titleTh           String    @map("title_th") @db.NVarChar(255)
-  titleEn           String?   @map("title_en") @db.NVarChar(255)
-  titleCn           String?   @map("title_cn") @db.NVarChar(255)
-  
-  contentTh         String    @map("content_th") @db.NVarChar(Max)
-  contentEn         String?   @map("content_en") @db.NVarChar(Max)
-  contentCn         String?   @map("content_cn") @db.NVarChar(Max)
-  
-  announcementType  String    @map("announcement_type") @db.NVarChar(50)
-  priority          String    @default("normal") @db.NVarChar(20)
-  
-  startDate         DateTime? @map("start_date") @db.DateTime2
-  endDate           DateTime? @map("end_date") @db.DateTime2
-  
-  trainId           Int?      @map("train_id")
-  train             Train?    @relation(fields: [trainId], references: [id])
-  
-  affectedRoutes    String?   @map("affected_routes") @db.NVarChar(Max)
-  
-  isActive          Boolean   @default(true) @map("is_active")
-  
-  createdAt         DateTime  @default(now()) @map("created_at") @db.DateTime2
-  updatedAt         DateTime  @default(now()) @updatedAt @map("updated_at") @db.DateTime2
-  createdBy         String?   @map("created_by") @db.UniqueIdentifier
-  
-  @@map("announcements")
+  id Int @id @default(autoincrement())
+
+  titleTh String  @map("title_th")
+  titleEn String? @map("title_en")
+  titleCn String? @map("title_cn")
+
+  contentTh String  @map("content_th")
+  contentEn String? @map("content_en")
+  contentCn String? @map("content_cn")
+
+  announcementType String @map("announcement_type")
+  priority         String @default("normal")
+
+  startDate DateTime? @map("start_date")
+  endDate   DateTime? @map("end_date")
+
+  trainId Int?   @map("train_id")
+  train   Train? @relation(fields: [trainId], references: [id])
+
+  affectedRoutes String? @map("affected_routes")
+
+  isActive Boolean @default(true) @map("is_active")
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @default(now()) @updatedAt @map("updated_at")
+  createdBy String?  @map("created_by")
+
   @@index([announcementType])
   @@index([priority])
   @@index([isActive])
   @@index([trainId])
+  @@map("announcements")
 }
 
 // ============================================
@@ -544,73 +544,73 @@ model Announcement {
 // ============================================
 
 model AdminUser {
-  id                String    @id @default(uuid()) @db.UniqueIdentifier
-  username          String    @unique @db.NVarChar(100)
-  email             String    @unique @db.NVarChar(255)
-  passwordHash      String    @map("password_hash") @db.NVarChar(255)
-  
-  fullName          String    @map("full_name") @db.NVarChar(255)
-  phone             String?   @db.NVarChar(20)
-  
-  roleId            Int       @map("role_id")
-  role              AdminRole @relation(fields: [roleId], references: [id])
-  
-  lastLoginAt       DateTime? @map("last_login_at") @db.DateTime2
-  lastLoginIp       String?   @map("last_login_ip") @db.NVarChar(45)
-  
-  isActive          Boolean   @default(true) @map("is_active")
-  
-  createdAt         DateTime  @default(now()) @map("created_at") @db.DateTime2
-  updatedAt         DateTime  @default(now()) @updatedAt @map("updated_at") @db.DateTime2
-  
-  adminLogs         AdminLog[]
-  
-  @@map("admin_users")
+  id           String @id @default(uuid())
+  username     String @unique
+  email        String @unique
+  passwordHash String @map("password_hash")
+
+  fullName String  @map("full_name")
+  phone    String?
+
+  roleId Int       @map("role_id")
+  role   AdminRole @relation(fields: [roleId], references: [id])
+
+  lastLoginAt DateTime? @map("last_login_at")
+  lastLoginIp String?   @map("last_login_ip")
+
+  isActive Boolean @default(true) @map("is_active")
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @default(now()) @updatedAt @map("updated_at")
+
+  adminLogs AdminLog[]
+
   @@index([username])
   @@index([email])
   @@index([roleId])
+  @@map("admin_users")
 }
 
 model AdminRole {
-  id                Int       @id @default(autoincrement())
-  code              String    @unique @db.NVarChar(50)
-  
-  nameTh            String    @map("name_th") @db.NVarChar(100)
-  nameEn            String?   @map("name_en") @db.NVarChar(100)
-  
-  permissions       String    @db.NVarChar(Max)
-  
-  isActive          Boolean   @default(true) @map("is_active")
-  
-  createdAt         DateTime  @default(now()) @map("created_at") @db.DateTime2
-  updatedAt         DateTime  @default(now()) @updatedAt @map("updated_at") @db.DateTime2
-  
-  adminUsers        AdminUser[]
-  
-  @@map("admin_roles")
+  id   Int    @id @default(autoincrement())
+  code String @unique
+
+  nameTh String  @map("name_th")
+  nameEn String? @map("name_en")
+
+  permissions String
+
+  isActive Boolean @default(true) @map("is_active")
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @default(now()) @updatedAt @map("updated_at")
+
+  adminUsers AdminUser[]
+
   @@index([code])
+  @@map("admin_roles")
 }
 
 model AdminLog {
-  id                Int       @id @default(autoincrement())
-  
-  adminUserId       String    @map("admin_user_id") @db.UniqueIdentifier
-  adminUser         AdminUser @relation(fields: [adminUserId], references: [id])
-  
-  action            String    @db.NVarChar(100)
-  entityType        String?   @map("entity_type") @db.NVarChar(100)
-  entityId          Int?      @map("entity_id")
-  
-  changes           String?   @db.NVarChar(Max)
-  
-  ipAddress         String?   @map("ip_address") @db.NVarChar(45)
-  userAgent         String?   @map("user_agent") @db.NVarChar(Max)
-  
-  createdAt         DateTime  @default(now()) @map("created_at") @db.DateTime2
-  
-  @@map("admin_logs")
+  id Int @id @default(autoincrement())
+
+  adminUserId String    @map("admin_user_id")
+  adminUser   AdminUser @relation(fields: [adminUserId], references: [id])
+
+  action     String
+  entityType String? @map("entity_type")
+  entityId   Int?    @map("entity_id")
+
+  changes String?
+
+  ipAddress String? @map("ip_address")
+  userAgent String? @map("user_agent")
+
+  createdAt DateTime @default(now()) @map("created_at")
+
   @@index([adminUserId])
   @@index([action])
   @@index([entityType])
   @@index([createdAt])
+  @@map("admin_logs")
 }
