@@ -21,6 +21,7 @@ export default function Toast({ id, type, message, onClose, duration = 3000 }: T
       }, duration);
       return () => clearTimeout(timer);
     }
+    return undefined;
   }, [id, duration, onClose]);
 
   const getIcon = () => {

@@ -126,7 +126,9 @@ export default function PopularTrains({ onTrainClick }: PopularTrainsProps) {
   const handleTrainClick = (train: PopularTrain) => {
     const origin = train.route.split(' → ')[0];
     const destination = train.route.split(' → ')[1];
-    onTrainClick?.(train.id, origin, destination);
+    if (origin && destination) {
+      onTrainClick?.(train.id, origin, destination);
+    }
   };
 
   const getTrendIcon = (trend: 'up' | 'down' | 'stable') => {

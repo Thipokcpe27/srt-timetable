@@ -2,7 +2,6 @@
 
 import { useState } from 'react';
 import { SearchParams, Train } from '@/lib/types';
-import { searchTrains } from '@/lib/searchUtils';
 import { searchHistoryService } from '@/lib/searchHistory';
 import TrainSearch from '@/components/TrainSearch';
 import TrainResults from '@/components/TrainResults';
@@ -33,22 +32,37 @@ export default function Home() {
     setAnnouncement('กำลังค้นหารถไฟ กรุณารอสักครู่');
     setSelectedTrains([]); // Clear selected trains on new search
 
-    // Simulate API call delay (reduced for better performance)
-    await new Promise(resolve => setTimeout(resolve, 100));
+    try {
+      // Call real API endpoint
+      const response = await fetch(`/api/trains/search?origin=${params.origin}&destination=${params.destination}`);
+      const data = await response.json();
 
-    const results = searchTrains(params);
-    setSearchResults(results);
-    setSearchParams(params);
-    setIsLoading(false);
+      if (data.success) {
+        const results = data.data as Train[];
+        setSearchResults(results);
+        setSearchParams(params);
 
-    // Save to search history
-    searchHistoryService.addToHistory(params);
+        // Save to search history
+        searchHistoryService.addToHistory(params);
 
-    // Announce results to screen readers
-    if (results.length === 0) {
-      setAnnouncement('ไม่พบรถไฟที่ตรงกับเงื่อนไขการค้นหา');
-    } else {
-      setAnnouncement(`พบรถไฟ ${results.length} ขบวน จากสถานี ${params.origin} ไปยังสถานี ${params.destination}`);
+        // Announce results to screen readers
+        if (results.length === 0) {
+          setAnnouncement('ไม่พบรถไฟที่ตรงกับเงื่อนไขการค้นหา');
+        } else {
+          setAnnouncement(`พบรถไฟ ${results.length} ขบวน`);
+        }
+      } else {
+        setSearchResults([]);
+        setAnnouncement('เกิดข้อผิดพลาดในการค้นหา กรุณาลองใหม่อีกครั้ง');
+        showToast('error', 'ไม่สามารถค้นหารถไฟได้ กรุณาลองใหม่');
+      }
+    } catch (error) {
+      console.error('Search error:', error);
+      setSearchResults([]);
+      setAnnouncement('เกิดข้อผิดพลาดในการเชื่อมต่อ');
+      showToast('error', 'เกิดข้อผิดพลาดในการเชื่อมต่อ');
+    } finally {
+      setIsLoading(false);
     }
   };
 

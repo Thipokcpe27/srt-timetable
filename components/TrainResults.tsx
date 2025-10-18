@@ -1,8 +1,7 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Train, SearchParams } from '@/lib/types';
-import { getStationName } from '@/lib/trainData';
 import TrainCard from './TrainCard';
 import TrainFilter, { FilterOptions } from './TrainFilter';
 import EmptyState from './EmptyState';
@@ -20,6 +19,31 @@ type SortOption = 'departure' | 'price-low' | 'price-high' | 'duration';
 export default function TrainResults({ trains, searchParams, selectedTrains = [], onToggleCompare }: TrainResultsProps) {
   const [filteredTrains, setFilteredTrains] = useState<Train[]>(trains);
   const [sortBy, setSortBy] = useState<SortOption>('departure');
+  const [stations, setStations] = useState<Map<string, string>>(new Map());
+
+  // Fetch stations for display names
+  useEffect(() => {
+    const fetchStations = async () => {
+      try {
+        const response = await fetch('/api/stations');
+        const data = await response.json();
+        if (data.success) {
+          const stationMap = new Map<string, string>();
+          data.data.forEach((s: { id: number; nameTh: string }) => {
+            stationMap.set(s.id.toString(), s.nameTh);
+          });
+          setStations(stationMap);
+        }
+      } catch (error) {
+        console.error('Failed to fetch stations:', error);
+      }
+    };
+    fetchStations();
+  }, []);
+
+  const getStationName = (id: string): string => {
+    return stations.get(id) || id;
+  };
 
   const sortTrains = (trainsToSort: Train[], sortOption: SortOption): Train[] => {
     const sorted = [...trainsToSort];
@@ -40,8 +64,16 @@ export default function TrainResults({ trains, searchParams, selectedTrains = []
         });
       case 'duration':
         return sorted.sort((a, b) => {
-          const durationA = parseInt(a.duration.split(':')[0]) * 60 + parseInt(a.duration.split(':')[1]);
-          const durationB = parseInt(b.duration.split(':')[0]) * 60 + parseInt(b.duration.split(':')[1]);
+          // Parse Thai format "XXชม. XXนาที"
+          const parseThaiDuration = (duration: string) => {
+            const hourMatch = duration.match(/(\d+)ชม\./);
+            const minuteMatch = duration.match(/(\d+)นาที/);
+            const hours = hourMatch && hourMatch[1] ? parseInt(hourMatch[1]) : 0;
+            const minutes = minuteMatch && minuteMatch[1] ? parseInt(minuteMatch[1]) : 0;
+            return hours * 60 + minutes;
+          };
+          const durationA = parseThaiDuration(a.duration);
+          const durationB = parseThaiDuration(b.duration);
           return durationA - durationB;
         });
       default:
@@ -68,7 +100,9 @@ export default function TrainResults({ trains, searchParams, selectedTrains = []
     // Filter by departure time
     if (filters.departureTimeRange.length > 0) {
       filtered = filtered.filter(train => {
-        const [hours] = train.departureTime.split(':').map(Number);
+        const parts = train.departureTime.split(':').map(Number);
+        const hours = parts[0];
+        if (hours === undefined) return false;
         return filters.departureTimeRange.some(range => {
           if (range === 'morning') return hours >= 6 && hours < 12;
           if (range === 'afternoon') return hours >= 12 && hours < 18;

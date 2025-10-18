@@ -40,10 +40,15 @@ export const searchTrains = (params: SearchParams): Train[] => {
     const timeA = a.departureTime.split(':').map(Number);
     const timeB = b.departureTime.split(':').map(Number);
 
-    if (timeA[0] !== timeB[0]) {
-      return timeA[0] - timeB[0];
+    const hourA = timeA[0] ?? 0;
+    const hourB = timeB[0] ?? 0;
+    const minA = timeA[1] ?? 0;
+    const minB = timeB[1] ?? 0;
+
+    if (hourA !== hourB) {
+      return hourA - hourB;
     }
-    return timeA[1] - timeB[1];
+    return minA - minB;
   });
 };
 

@@ -4,9 +4,14 @@ import { useState, useRef, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { searchSchema, type SearchFormData } from '@/lib/searchUtils';
-import { stations } from '@/lib/trainData';
 import { SearchParams } from '@/lib/types';
 import { Search, ArrowLeftRight, ChevronDown } from 'lucide-react';
+
+interface StationData {
+  id: string;
+  name: string;
+  code: number;
+}
 
 interface TrainSearchProps {
   onSearch: (params: SearchParams) => void;
@@ -15,6 +20,7 @@ interface TrainSearchProps {
 }
 
 export default function TrainSearch({ onSearch, isLoading = false, initialValues }: TrainSearchProps) {
+  const [stations, setStations] = useState<StationData[]>([]);
   const [swapStations, setSwapStations] = useState(false);
   const [originSearch, setOriginSearch] = useState('');
   const [destinationSearch, setDestinationSearch] = useState('');
@@ -24,6 +30,30 @@ export default function TrainSearch({ onSearch, isLoading = false, initialValues
   const [focusedDestinationIndex, setFocusedDestinationIndex] = useState(-1);
   const originRef = useRef<HTMLDivElement>(null);
   const destinationRef = useRef<HTMLDivElement>(null);
+
+  // Fetch stations from API
+  useEffect(() => {
+    const fetchStations = async () => {
+      try {
+        const response = await fetch('/api/stations');
+        const data = await response.json();
+        if (data.success) {
+          setStations(
+            data.data
+              .filter((s: { isActive: boolean }) => s.isActive)
+              .map((s: { id: number; nameTh: string; stationCode: number }) => ({
+                id: s.id.toString(),
+                name: s.nameTh,
+                code: s.stationCode,
+              }))
+          );
+        }
+      } catch (error) {
+        console.error('Failed to fetch stations:', error);
+      }
+    };
+    fetchStations();
+  }, []);
 
   const {
     register,
@@ -40,7 +70,7 @@ export default function TrainSearch({ onSearch, isLoading = false, initialValues
 
   // Set initial values if provided
   useEffect(() => {
-    if (initialValues) {
+    if (initialValues && stations.length > 0) {
       setValue('origin', initialValues.origin);
       setValue('destination', initialValues.destination);
       const originStation = stations.find(s => s.id === initialValues.origin);
@@ -48,7 +78,7 @@ export default function TrainSearch({ onSearch, isLoading = false, initialValues
       if (originStation) setOriginSearch(originStation.name);
       if (destStation) setDestinationSearch(destStation.name);
     }
-  }, [initialValues, setValue]);
+  }, [initialValues, setValue, stations]);
 
   // Filter stations based on search
   const filteredOriginStations = stations.filter(station =>
@@ -114,8 +144,10 @@ export default function TrainSearch({ onSearch, isLoading = false, initialValues
         e.preventDefault();
         if (focusedOriginIndex >= 0) {
           const station = filteredOriginStations[focusedOriginIndex];
-          handleOriginSelect(station.id, station.name);
-          setFocusedOriginIndex(-1);
+          if (station) {
+            handleOriginSelect(station.id, station.name);
+            setFocusedOriginIndex(-1);
+          }
         }
         break;
       case 'Escape':
@@ -145,8 +177,10 @@ export default function TrainSearch({ onSearch, isLoading = false, initialValues
         e.preventDefault();
         if (focusedDestinationIndex >= 0) {
           const station = filteredDestinationStations[focusedDestinationIndex];
-          handleDestinationSelect(station.id, station.name);
-          setFocusedDestinationIndex(-1);
+          if (station) {
+            handleDestinationSelect(station.id, station.name);
+            setFocusedDestinationIndex(-1);
+          }
         }
         break;
       case 'Escape':

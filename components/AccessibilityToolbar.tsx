@@ -90,14 +90,18 @@ export default function AccessibilityToolbar() {
     const sizes: FontSize[] = ['normal', 'large', 'x-large'];
     const currentIndex = sizes.indexOf(fontSize);
     const nextSize = sizes[(currentIndex + 1) % sizes.length];
-    handleFontSizeChange(nextSize);
+    if (nextSize) {
+      handleFontSizeChange(nextSize);
+    }
   };
 
   const cycleColorMode = () => {
     const modes: ColorMode[] = ['normal', 'protanopia', 'deuteranopia', 'tritanopia', 'high-contrast'];
     const currentIndex = modes.indexOf(colorMode);
     const nextMode = modes[(currentIndex + 1) % modes.length];
-    handleColorModeChange(nextMode);
+    if (nextMode) {
+      handleColorModeChange(nextMode);
+    }
   };
 
   const getFontSizeLabel = () => {

@@ -1,0 +1,29 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(dir:*)",
+      "Bash(npx create-next-app:*)",
+      "Bash(mkdir:*)",
+      "Bash(npm init:*)",
+      "Bash(npm install)",
+      "Bash(npm run dev:*)",
+      "WebFetch(domain:vibe-1759424867528.vercel.app)",
+      "Bash(taskkill:*)",
+      "Bash(echo:*)",
+      "Bash(npm install:*)",
+      "Bash(npm run build:*)",
+      "Bash(npx tsx:*)",
+      "Bash(node:*)",
+      "Bash(test:*)",
+      "Bash(cat:*)",
+      "Bash(find:*)",
+      "Bash(timeout 180 npm run build:*)",
+      "Bash(docker ps:*)",
+      "Bash(npx prisma db push:*)",
+      "Bash(npx prisma db seed)",
+      "Bash(curl:*)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}

@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Sarabun } from "next/font/google";
 import "./globals.css";
 import { ToastProvider } from "@/components/ToastContainer";
+import { Providers } from "./providers";
 
 const sarabun = Sarabun({
   subsets: ["thai", "latin"],
@@ -27,9 +28,11 @@ export default function RootLayout({
   return (
     <html lang="th">
       <body className={`${sarabun.className} antialiased`}>
-        <ToastProvider>
-          {children}
-        </ToastProvider>
+        <Providers>
+          <ToastProvider>
+            {children}
+          </ToastProvider>
+        </Providers>
       </body>
     </html>
   );
