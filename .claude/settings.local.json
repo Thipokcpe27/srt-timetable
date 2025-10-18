@@ -21,7 +21,10 @@
       "Bash(docker ps:*)",
       "Bash(npx prisma db push:*)",
       "Bash(npx prisma db seed)",
-      "Bash(curl:*)"
+      "Bash(curl:*)",
+      "Bash(git commit:*)",
+      "Bash(git push:*)",
+      "Bash(git add:*)"
     ],
     "deny": [],
     "ask": []

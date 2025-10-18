@@ -405,6 +405,12 @@ export default function Home() {
                 <li>
                   <a href="#" className="text-gray-600 hover:text-blue-600 transition-colors">ช่วยเหลือ</a>
                 </li>
+                <li>
+                  <a href="/admin/login" className="text-blue-600 hover:text-blue-700 transition-colors font-semibold flex items-center gap-1">
+                    <Shield className="w-3 h-3" aria-hidden="true" />
+                    เข้าสู่ระบบผู้ดูแล
+                  </a>
+                </li>
               </ul>
             </div>
 
